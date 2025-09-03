@@ -118,7 +118,7 @@ export default {
               label: this.$tr('isite.cms.form.status'),
             },
             loadOptions: {
-              apiRoute: 'apiRoutes.qblog.statuses'
+              apiRoute: 'apiRoutes.qrentcar.statuses'
             }
           },
         },
@@ -188,12 +188,12 @@ export default {
 						//replace name value
             if (data.options) {
 							data.locatable = {
-								countryId: data.options.countryId,
-								provinceId: data.options.provinceId,
-								cityId: data.options.cityId,
+								countryId: data.countryId,
+								provinceId: data.provinceId,
+								cityId: data.cityId,
 								lat: data.options.map?.lat,
 								lng: data.options.map?.lng
-							}                            
+							}                         
             }
             //Response
             resolve(data);
