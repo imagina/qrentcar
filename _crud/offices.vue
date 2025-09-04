@@ -24,7 +24,7 @@ export default {
             },
             {
               name: 'title', label: this.$tr('isite.cms.form.title'), field: 'title', align: 'rigth'
-            },            
+            },
             {
               name: 'created_at', label: this.$tr('isite.cms.form.createdAt'), field: 'createdAt', align: 'left',
               format: val => val ? this.$trd(val) : '-'
@@ -37,9 +37,7 @@ export default {
               name: 'actions', label: this.$tr('isite.cms.form.actions'), align: 'left'
             }
           ],
-          requestParams: {
-            //include: ''
-          },
+          requestParams: { include: 'locatable,translations' },
           filters: {
             countryId: {
               value: null,
@@ -84,9 +82,7 @@ export default {
         },
         update: {
           title: this.$tr('irentcar.cms.updateOficce'),
-          requestParams: {
-            //include: ''
-          },
+          requestParams: { include: 'locatable,translations' },
         },
         delete: true,
         formLeft: {
@@ -123,51 +119,66 @@ export default {
           },
         },
         formRight: {
+          address: {
+            value: '',
+            type: 'input',
+            fakeFieldName: 'locatable',
+            props : {
+              label: `${this.$tr('isite.cms.form.address')}*`,
+              rules: [
+                val => !!val || this.$tr('isite.cms.message.fieldRequired')
+              ],
+            }
+          },
           countryId: {
             value: null,
             type: 'select',
+            fakeFieldName: 'locatable',
             props: {
-              label: this.$tr('isite.cms.label.country')
+              label: this.$tr('isite.cms.label.country'),
+              clearable: true,
             },
             loadOptions: {
               apiRoute: 'apiRoutes.qlocations.countries',
-							requestParams: { 
-                include: 'translations',
-							},
-              select: { label: 'name', id: 'id' }
-            }
+              requestParams: { include: 'translations' },
+              select: { label: 'name', id: 'id' },
+            },
           },
           provinceId: {
             value: null,
             type: 'select',
+            fakeFieldName: 'locatable',
             props: {
               label: this.$tr('isite.cms.label.department'),
-              readonly: (this.crudInfo.countryId ? false : true)
+              readonly: this.crudInfo.locatable?.countryId ? false : true,
+              clearable: true,
             },
             loadOptions: {
-              apiRoute: this.crudInfo.countryId ? 'apiRoutes.qlocations.provinces' : false,
+              apiRoute: this.crudInfo.locatable?.countryId
+                ? 'apiRoutes.qlocations.provinces'
+                : false,
               select: { label: 'name', id: 'id' },
-              requestParams: { 
-                include: 'translations',
-                filter: { country: this.crudInfo.countryId } 
-                }
-            }
+              requestParams: { filter: { country: this.crudInfo.locatable?.countryId }, include: 'translations' },
+            },
           },
           cityId: {
             value: null,
             type: 'select',
+            fakeFieldName: 'locatable',
             props: {
               label: this.$tr('isite.cms.form.city'),
-              readonly: (this.crudInfo.provinceId ? false : true)
+              readonly: this.crudInfo.locatable?.provinceId ? false : true,
+              clearable: true,
             },
             loadOptions: {
-              apiRoute: this.crudInfo.provinceId ? 'apiRoutes.qlocations.cities' : false,
+              apiRoute: this.crudInfo.locatable?.provinceId
+                ? 'apiRoutes.qlocations.cities'
+                : false,
               select: { label: 'name', id: 'id' },
-              requestParams: { 
-								include: 'translations',
-								filter: { province_id: this.crudInfo.provinceId } 
-							}
-            }
+              requestParams: {
+                filter: { province_id: this.crudInfo.locatable?.provinceId, include: 'translations' },
+              },
+            },
           },
 					map: {
             value: null,
@@ -179,21 +190,14 @@ export default {
               emitDefault: (this.crudInfo.typeForm === 'create')
             }
           }
-          
+
         },
         getDataForm(data, type) {
           return new Promise(resolve => {
             //replace name value
-            console.log(data)
-						//replace name value
             if (data.options) {
-							data.locatable = {
-								countryId: data.countryId,
-								provinceId: data.provinceId,
-								cityId: data.cityId,
-								lat: data.options.map?.lat,
-								lng: data.options.map?.lng
-							}                         
+              data.locatable.lat = data.options.map?.lat,
+              data.locatable.lng = data.options.map?.lng
             }
             //Response
             resolve(data);
