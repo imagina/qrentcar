@@ -7,7 +7,9 @@ export default {
         "adminGammas": "Gamas",
         "adminExtras": "Extras"
       },
-      "label": {},
+      "label": {
+        "nextGamma": "Siguiente Gamma"
+      },
       "form": {
         "passengersNumber": "Numero de Pasajeros",
         "doors": "Puertas",

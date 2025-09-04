@@ -161,6 +161,16 @@ export default {
               apiRoute: 'apiRoutes.qrentcar.vehicleTypes'
             }
           },
+          nextGammaId: {
+            value: null,
+            type: 'select',
+            props: {
+              label: this.$tr('irentcar.cms.label.nextGamma'),
+            },
+            loadOptions: {
+              apiRoute: 'apiRoutes.qrentcar.gammas'
+            }
+          },
           passengersNumber: {
             value: '0',
             type: 'input',
@@ -185,6 +195,9 @@ export default {
               type: 'number'
             }
           },
+          
+
+
           mediasSingle: {
             value: {},
             type: 'media',
