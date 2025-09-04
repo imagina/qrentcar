@@ -7,7 +7,8 @@ export default [
       icon: 'fa-light fa-car-side',
       children: [
         pages.qrentcar.offices,
-        pages.qrentcar.gammas
+        pages.qrentcar.gammas,
+        pages.qrentcar.extras
       ]
     },
   ]

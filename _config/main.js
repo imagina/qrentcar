@@ -3,5 +3,7 @@ export default {
   //Entities
   entityNames: {
     offices: 'offices',
+    gammas: 'gammas',
+    extras: 'extras',
   },
 }

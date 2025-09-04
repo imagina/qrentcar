@@ -33,5 +33,21 @@ export default {
     }
   },
 
+   extras: {
+    permission: 'irentcar.extras.manage',
+    activated: true,
+    authenticated: true,
+    path: '/rentcar/extras/index',
+    name: 'qrentcar.admin.extras',
+    crud : import('modules/qrentcar/_crud/extras'),
+    page: () => import('modules/qcrud/_pages/admin/crudPage'),
+    layout: () => import('layouts/master.vue'),
+    title: 'irentcar.cms.sidebar.adminExtras',
+    icon: 'fa-light fa-sliders',
+    subHeader: {
+        refresh: true,
+    }
+  },
+
   
 }

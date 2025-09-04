@@ -5,6 +5,7 @@ export default {
         "adminGroup": "Rentcar",
         "adminOffices": "Offices",
         "adminGammas": "Gammas",
+        "adminExtras": "Extras",
       },
       "label": {},
       "form": {
@@ -16,7 +17,12 @@ export default {
         "fuelType": "Fuel Type",
       },
       "newOffice": "New Office",
-      "updateOffice": "Update Office"
+      "updateOffice": "Update Office",
+      "newGamma": "New Gamma",
+      "updateGamma": "Update Gamma",
+      "newExtra": "New Extra",
+      "updateExtra": "Update Extra"
+
     }
   }
 }

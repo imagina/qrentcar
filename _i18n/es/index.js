@@ -4,7 +4,8 @@ export default {
       "sidebar": {
         "adminGroup": "Rentcar",
         "adminOffices": "Oficinas",
-        "adminGammas": "Gamas"
+        "adminGammas": "Gamas",
+        "adminExtras": "Extras"
       },
       "label": {},
       "form": {
@@ -16,7 +17,11 @@ export default {
         "fuelType": "Tipo de Combustible",
       },
       "newOffice": "Nueva Oficina",
-      "updateOffice": "Actualizar Oficina"
+      "updateOffice": "Actualizar Oficina",
+      "newGamma": "Nueva Gama",
+      "updateGamma": "Actualizar Gama",
+      "newExtra": "Nuevo Extra",
+      "updateExtra": "Actualizar Extra"
     }
   }
 }

@@ -9,6 +9,7 @@ export default {
   offices: `${urlBase}/offices`,
   statuses: `${urlBase}/statuses`,
   gammas: `${urlBase}/gammas`,
+  extras: `${urlBase}/extras`,
 
   transmissionTypes: `${urlBase}/transmission-types`,
   fuelTypes: `${urlBase}/fuel-types`,
