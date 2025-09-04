@@ -8,4 +8,10 @@ export default {
   version: moduleVersion, 
   offices: `${urlBase}/offices`,
   statuses: `${urlBase}/statuses`,
+  gammas: `${urlBase}/gammas`,
+
+  transmissionTypes: `${urlBase}/transmission-types`,
+  fuelTypes: `${urlBase}/fuel-types`,
+  vehicleTypes: `${urlBase}/vehicle-types`,
+
 }

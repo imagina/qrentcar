@@ -6,7 +6,8 @@ export default [
       title: 'irentcar.cms.sidebar.adminGroup',
       icon: 'fa-light fa-car-side',
       children: [
-        pages.qrentcar.offices
+        pages.qrentcar.offices,
+        pages.qrentcar.gammas
       ]
     },
   ]

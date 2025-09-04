@@ -81,7 +81,7 @@ export default {
           }
         },
         update: {
-          title: this.$tr('irentcar.cms.updateOficce'),
+          title: this.$tr('irentcar.cms.updateOffice'),
           requestParams: { include: 'locatable,translations' },
         },
         delete: true,
