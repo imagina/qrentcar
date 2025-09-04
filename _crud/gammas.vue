@@ -128,7 +128,7 @@ export default {
                 val => !!val || this.$tr('isite.cms.message.fieldRequired')
               ],
             }
-          },
+          }
         },
         formRight: {
           transmissionTypeId: {
@@ -161,7 +161,6 @@ export default {
               apiRoute: 'apiRoutes.qrentcar.vehicleTypes'
             }
           },
-
           passengersNumber: {
             value: '0',
             type: 'input',
@@ -174,7 +173,7 @@ export default {
             value: '0',
             type: 'input',
             props: {
-              label: this.$tr('irentcar.cms.form.luggagea'),
+              label: this.$tr('irentcar.cms.form.luggages'),
               type: 'number'
             }
           },
@@ -186,6 +185,16 @@ export default {
               type: 'number'
             }
           },
+          mediasSingle: {
+            value: {},
+            type: 'media',
+            props: {
+              label: this.$tr('isite.cms.form.image'),
+              zone: 'mainimage',
+              entity: "Modules\\Irentcar\\Models\\Gamma",
+              entityId: null
+            }
+          }
         }
       };
     },

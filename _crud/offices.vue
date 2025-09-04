@@ -49,7 +49,8 @@ export default {
               loadOptions: {
                 apiRoute: 'apiRoutes.qlocations.countries',
                 requestParams: {include: 'translations'},
-                select: { label: 'name', id: 'id' }
+                select: { label: 'name', id: 'id' },
+                filterByQuery: true
               }
             },
             provinceId: {
@@ -62,7 +63,8 @@ export default {
               loadOptions: {
                 apiRoute: 'apiRoutes.qlocations.provinces',
                 requestParams: {include: 'translations'},
-                select: { label: 'name', id: 'id' }
+                select: { label: 'name', id: 'id' },
+                filterByQuery: true
               }
             },
             cityId: {
@@ -75,7 +77,8 @@ export default {
               loadOptions: {
                 apiRoute: 'apiRoutes.qlocations.cities',
                 requestParams: {include: 'translations'},
-                select: { label: 'name', id: 'id' }
+                select: { label: 'name', id: 'id' },
+                filterByQuery: true
               }
             }
           }
@@ -139,6 +142,7 @@ export default {
               clearable: true,
             },
             loadOptions: {
+              filterByQuery: true,
               apiRoute: 'apiRoutes.qlocations.countries',
               requestParams: { include: 'translations' },
               select: { label: 'name', id: 'id' },
@@ -154,11 +158,15 @@ export default {
               clearable: true,
             },
             loadOptions: {
+              filterByQuery: true,
               apiRoute: this.crudInfo.locatable?.countryId
                 ? 'apiRoutes.qlocations.provinces'
                 : false,
               select: { label: 'name', id: 'id' },
-              requestParams: { filter: { country: this.crudInfo.locatable?.countryId }, include: 'translations' },
+              requestParams: {
+                filter: { country: this.crudInfo.locatable?.countryId },
+                include: 'translations'
+              },
             },
           },
           cityId: {
@@ -171,12 +179,14 @@ export default {
               clearable: true,
             },
             loadOptions: {
+              filterByQuery: true,
               apiRoute: this.crudInfo.locatable?.provinceId
                 ? 'apiRoutes.qlocations.cities'
                 : false,
               select: { label: 'name', id: 'id' },
               requestParams: {
-                filter: { province_id: this.crudInfo.locatable?.provinceId, include: 'translations' },
+                filter: { province_id: this.crudInfo.locatable?.provinceId },
+                include: 'translations'
               },
             },
           },
