@@ -158,12 +158,13 @@ export default {
               clearable: true,
             },
             loadOptions: {
+              filterByQuery: true,
               apiRoute: this.crudInfo.locatable?.countryId
                 ? 'apiRoutes.qlocations.provinces'
                 : false,
               select: { label: 'name', id: 'id' },
               requestParams: {
-                filter: { country: this.crudInfo.locatable?.countryId },
+                filter: { countryId: this.crudInfo.locatable?.countryId },
                 include: 'translations'
               },
             },
@@ -178,12 +179,13 @@ export default {
               clearable: true,
             },
             loadOptions: {
+              filterByQuery: true,
               apiRoute: this.crudInfo.locatable?.provinceId
                 ? 'apiRoutes.qlocations.cities'
                 : false,
               select: { label: 'name', id: 'id' },
               requestParams: {
-                filter: { province_id: this.crudInfo.locatable?.provinceId },
+                filter: { provinceId: this.crudInfo.locatable?.provinceId },
                 include: 'translations'
               },
             },
