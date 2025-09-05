@@ -111,7 +111,7 @@ export default {
             }
           },
 					statusId: {
-            value: null,
+            value: 1,
             type: 'select',
             props: {
               label: this.$tr('isite.cms.form.status'),
@@ -158,7 +158,6 @@ export default {
               clearable: true,
             },
             loadOptions: {
-              filterByQuery: true,
               apiRoute: this.crudInfo.locatable?.countryId
                 ? 'apiRoutes.qlocations.provinces'
                 : false,
@@ -179,7 +178,6 @@ export default {
               clearable: true,
             },
             loadOptions: {
-              filterByQuery: true,
               apiRoute: this.crudInfo.locatable?.provinceId
                 ? 'apiRoutes.qlocations.cities'
                 : false,
