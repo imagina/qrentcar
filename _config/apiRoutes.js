@@ -10,6 +10,8 @@ export default {
   statuses: `${urlBase}/statuses`,
   gammas: `${urlBase}/gammas`,
   extras: `${urlBase}/extras`,
+  gammaOffice: `${urlBase}/gamma-office`,
+  dailyAvailabilities: `${urlBase}/daily-availabilities`,
 
   transmissionTypes: `${urlBase}/transmission-types`,
   fuelTypes: `${urlBase}/fuel-types`,

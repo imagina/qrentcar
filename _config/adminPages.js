@@ -33,7 +33,7 @@ export default {
     }
   },
 
-   extras: {
+  extras: {
     permission: 'irentcar.extras.manage',
     activated: true,
     authenticated: true,
@@ -45,9 +45,26 @@ export default {
     title: 'irentcar.cms.sidebar.adminExtras',
     icon: 'fa-light fa-sliders',
     subHeader: {
-        refresh: true,
+      refresh: true,
     }
   },
+
+  availability: {
+    permission: 'irentcar.dailyavailabilities.manage',
+    activated: true,
+    authenticated: true,
+    path: '/rentcar/availability/index',
+    name: 'qrentcar.admin.availability',    
+    page: () => import('modules/qrentcar/_pages/availability'),
+    layout: () => import('layouts/master.vue'),
+    title: 'irentcar.cms.sidebar.adminAvailability',
+    icon: 'fa-light fa-calendar-days',
+    subHeader: {
+      refresh: true,
+    }
+  }
+  
+
 
   
 }
