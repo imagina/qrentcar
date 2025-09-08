@@ -37,8 +37,43 @@ export default function controller(props: any, emit: any) {
           label: i18n.tr('isite.cms.form.date'),
           mask: dateFormat
         }
-      }
+      },
+      quantity: {
+        type: 'input',
+        props: {
+          label: i18n.tr('isite.cms.form.quantity'),
+          type: 'number',
+          rules: [
+            val => !!val || i18n.tr('isite.cms.message.fieldRequired'),
+                val => /^[0-9]+$/.test(val) || 'Only digits allowed'
+
+          ],
+        }
+      },
+      price: {
+        type: 'input',
+        props: {
+          label: i18n.tr('isite.cms.form.price'),
+          type: 'number',
+          rules: [
+            val => !!val || i18n.tr('isite.cms.message.fieldRequired')
+          ],
+        }
+      },
+      reason: {
+        type: 'input',
+        props: {
+          label: i18n.tr('isite.cms.form.reason'),          
+        }
+      },
     },
+
+    modelValues: {
+      quantity: null,
+      price: null, 
+      reason: null
+    },
+    
     gammaOffice: [],
     dailyAvailabilities: [],
     selectedOffice: null,
@@ -77,17 +112,46 @@ export default function controller(props: any, emit: any) {
       //state.loading = true
 
     },
-    getAvailability(gammaOfficeId, date){
-      const fullDate = moment(date).format(dateFormat)
-      return state.dailyAvailabilities.filter(daily => daily.gammaOfficeId == gammaOfficeId &&  moment(daily.date).format(dateFormat) == fullDate  )
+    setAvailabilityModal(availability){
+      state.modelValues.quantity = availability.quantity
+      state.modelValues.price = availability.price
     },
-    getDailyAvailabilities(){
-      const ids = state.gammaOffice.map(gamma => gamma.id)
-      if(!ids.length) return
+    async updateAvailability(availability){
+      state.loading = true
+      availability.quantity =  state.modelValues.quantity,
+      availability.price =  state.modelValues.price
+      availability.reason = state.modelValues.reason
+
+      if(availability.id){      
+        await  services.updateAvailability(availability.id, {...availability})
+      } else {                
+        delete availability.reservedQuantity
+        console.log(availability)
+        await services.createAvailability(availability)
+      }
+      state.loading = false
+      methods.getDailyAvailabilities()
+    },
+    getAvailability(gammaOffice, date){
+      const fullDate = moment(date).format(dateFormat)
+      const availability = state.dailyAvailabilities.find(daily => daily.gammaOfficeId == gammaOffice.id &&  moment(daily.availableDate).format(dateFormat) == fullDate  ) || null                     
+      const result = {
+        id: availability?.id || null,
+        gammaOfficeId: gammaOffice.id,
+        availableDate: fullDate,
+        reservedQuantity: availability?.reservedQuantity || 0, 
+        quantity: availability?.quantity || gammaOffice.quantity, 
+        price: availability?.price || gammaOffice.price, 
+        reason : availability?.reason || '',
+      }       
+      return result      
+    },
+    getDailyAvailabilities(){      
+      if(!state.selectedOffice) return
       state.loading = true
       const from = state.selectedDate
       services.getDailyAvailabilities({
-        ids,
+        officeId: state.selectedOffice.id,        
         from,
         to: moment(from).add(30, "days").format(dateFormat),
       }).then(response => {
@@ -100,6 +164,10 @@ export default function controller(props: any, emit: any) {
       services.getGammaOffice(state.selectedOffice).then(response => {
         if(response){
           state.gammaOffice = response
+          state.gammaOffice.unshift({          
+            title: state.title,
+            gamma: null
+          })
         }
       })
     },
