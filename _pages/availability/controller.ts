@@ -63,17 +63,17 @@ export default function controller(props: any, emit: any) {
       reason: {
         type: 'input',
         props: {
-          label: i18n.tr('isite.cms.form.reason'),          
+          label: i18n.tr('isite.cms.form.reason'),
         }
       },
     },
 
     modelValues: {
       quantity: null,
-      price: null, 
+      price: null,
       reason: null
     },
-    
+
     gammaOffice: [],
     dailyAvailabilities: [],
     selectedOffice: null,
@@ -84,25 +84,7 @@ export default function controller(props: any, emit: any) {
   const computeds = {
     // key: computed(() => {})
     isOfficeSelected: computed(() => state.selectedOffice),
-    nextDays: computed(() => methods.getNextDays()),
-    /*
-    cols: computed(() => {
-      return methods.getNextDays().map(day => {
-        return {
-          name: day.date, 
-          label: day.date, 
-          field: 'value'
-        }
-      })
-    }),
-    rows: computed(() => {
-      return state.dailyAvailabilities.map(day => {
-        return {
-          value: day.quantity
-        }
-      })
-    })
-      */
+    nextDays: computed(() => methods.getNextDays())    
   }
 
   // Methods
@@ -115,6 +97,7 @@ export default function controller(props: any, emit: any) {
     setAvailabilityModal(availability){
       state.modelValues.quantity = availability.quantity
       state.modelValues.price = availability.price
+      state.modelValues.reason = availability.reason
     },
     async updateAvailability(availability){
       state.loading = true
@@ -122,11 +105,10 @@ export default function controller(props: any, emit: any) {
       availability.price =  state.modelValues.price
       availability.reason = state.modelValues.reason
 
-      if(availability.id){      
+      if(availability.id){
         await  services.updateAvailability(availability.id, {...availability})
-      } else {                
+      } else {
         delete availability.reservedQuantity
-        console.log(availability)
         await services.createAvailability(availability)
       }
       state.loading = false
@@ -134,42 +116,43 @@ export default function controller(props: any, emit: any) {
     },
     getAvailability(gammaOffice, date){
       const fullDate = moment(date).format(dateFormat)
-      const availability = state.dailyAvailabilities.find(daily => daily.gammaOfficeId == gammaOffice.id &&  moment(daily.availableDate).format(dateFormat) == fullDate  ) || null                     
+      const availability = state.dailyAvailabilities.find(daily => daily.gammaOfficeId == gammaOffice.id &&  moment(daily.availableDate).format(dateFormat) == fullDate  ) || null
       const result = {
         id: availability?.id || null,
         gammaOfficeId: gammaOffice.id,
         availableDate: fullDate,
-        reservedQuantity: availability?.reservedQuantity || 0, 
-        quantity: availability?.quantity || gammaOffice.quantity, 
-        price: availability?.price || gammaOffice.price, 
+        reservedQuantity: availability?.reservedQuantity || 0,
+        quantity: availability?.quantity || gammaOffice.quantity,
+        price: availability?.price || gammaOffice.price,
         reason : availability?.reason || '',
-      }       
-      return result      
+      }
+      return result
     },
-    getDailyAvailabilities(){      
+    getDailyAvailabilities(){
       if(!state.selectedOffice) return
       state.loading = true
       const from = state.selectedDate
       services.getDailyAvailabilities({
-        officeId: state.selectedOffice.id,        
+        officeId: state.selectedOffice.id,
         from,
         to: moment(from).add(30, "days").format(dateFormat),
       }).then(response => {
         state.dailyAvailabilities = response || []
         state.loading = false
-        console.log(response)
       })
     },
-    getGammaOffice(){
-      services.getGammaOffice(state.selectedOffice).then(response => {
+    async getGammaOffice(){
+      state.loading = true
+      await services.getGammaOffice(state.selectedOffice).then(response => {
         if(response){
           state.gammaOffice = response
-          state.gammaOffice.unshift({          
-            title: state.title,
+          state.gammaOffice.unshift({
+            title: '',
             gamma: null
           })
         }
       })
+      state.loading = false
     },
     getNextDays(){
       const startDate = moment(state.selectedDate)
@@ -179,7 +162,7 @@ export default function controller(props: any, emit: any) {
         let day = moment(startDate).add(i, "days");
         nextDays.push({
           fullDate: day.format(dateFormat),
-          label: day.format("ddd"), 
+          label: day.format("ddd"),
           date: day.format("D"),
           name: day.format("ddd")
         });
