@@ -19,25 +19,7 @@ export default function controller(props: any, emit: any) {
     loading: false,
     title: 'Ready Rent Cars',
 
-    dynamicFields: {
-      offices: {
-        value: null,
-        type: 'select',
-        props: {
-          label: i18n.tr('irentcar.cms.sidebar.adminOffices'),
-        },
-        loadOptions: {
-          apiRoute: 'apiRoutes.qrentcar.offices'
-        }
-      },
-      date: {
-        value: null,
-        type: 'date',
-        props: {
-          label: i18n.tr('isite.cms.form.date'),
-          mask: dateFormat
-        }
-      },
+    dynamicFields: {      
       quantity: {
         type: 'input',
         props: {
@@ -68,6 +50,36 @@ export default function controller(props: any, emit: any) {
       },
     },
 
+    dynamicFilter: {
+      office: {
+        value: null,
+        type: 'select',
+        quickFilter: true,
+        props: {
+          label: i18n.tr('irentcar.cms.sidebar.adminOffices'),
+        },
+        loadOptions: {
+          apiRoute: 'apiRoutes.qrentcar.offices'
+        }
+      },
+      date: {
+        value: null,
+        type: 'date',
+        quickFilter: true,
+        props: {
+          label: i18n.tr('isite.cms.form.date'),
+          mask: dateFormat
+        }
+      },
+    },
+
+    filterValues: {
+      office: null,
+      date: null
+    },
+
+  
+
     modelValues: {
       quantity: null,
       price: null,
@@ -83,7 +95,7 @@ export default function controller(props: any, emit: any) {
   // Computed
   const computeds = {
     // key: computed(() => {})
-    isOfficeSelected: computed(() => state.selectedOffice),
+    showCalendar: computed(() => state.gammaOffice.length > 1 && !state.loading && state.filterValues.date ),
     nextDays: computed(() => methods.getNextDays())    
   }
 
@@ -128,12 +140,21 @@ export default function controller(props: any, emit: any) {
       }
       return result
     },
+    async updateDynamicFilterValues(values){
+      if(state.filterValues.office != values.office){
+        state.filterValues.office = values.office
+        await methods.getGammaOffice()
+      }
+
+      state.filterValues.date = values.date
+      await methods.getDailyAvailabilities()
+    }, 
     getDailyAvailabilities(){
-      if(!state.selectedOffice) return
+      if(!state.filterValues.office || !state.filterValues.date) return
       state.loading = true
-      const from = state.selectedDate
+      const from = state.filterValues.date
       services.getDailyAvailabilities({
-        officeId: state.selectedOffice.id,
+        officeId: state.filterValues.office.id,
         from,
         to: moment(from).add(30, "days").format(dateFormat),
       }).then(response => {
@@ -143,7 +164,7 @@ export default function controller(props: any, emit: any) {
     },
     async getGammaOffice(){
       state.loading = true
-      await services.getGammaOffice(state.selectedOffice).then(response => {
+      await services.getGammaOffice(state.filterValues.office).then(response => {
         if(response){
           state.gammaOffice = response
           state.gammaOffice.unshift({
@@ -155,7 +176,7 @@ export default function controller(props: any, emit: any) {
       state.loading = false
     },
     getNextDays(){
-      const startDate = moment(state.selectedDate)
+      const startDate = moment(state.filterValues.date)
       let nextDays = []
 
       for (let i = 0; i <= 30; i++) {
