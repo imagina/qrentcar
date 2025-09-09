@@ -18,37 +18,8 @@ export default function controller(props: any, emit: any) {
     // Key: Default Value
     loading: false,
     title: 'Ready Rent Cars',
-
-    dynamicFields: {      
-      quantity: {
-        type: 'input',
-        props: {
-          label: i18n.tr('isite.cms.form.quantity'),
-          type: 'number',
-          rules: [
-            val => !!val || i18n.tr('isite.cms.message.fieldRequired'),
-                val => /^[0-9]+$/.test(val) || 'Only digits allowed'
-
-          ],
-        }
-      },
-      price: {
-        type: 'input',
-        props: {
-          label: i18n.tr('isite.cms.form.price'),
-          type: 'number',
-          rules: [
-            val => !!val || i18n.tr('isite.cms.message.fieldRequired')
-          ],
-        }
-      },
-      reason: {
-        type: 'input',
-        props: {
-          label: i18n.tr('isite.cms.form.reason'),
-        }
-      },
-    },
+    rows: [],
+    
 
     dynamicFilter: {
       office: {
@@ -63,39 +34,183 @@ export default function controller(props: any, emit: any) {
         }
       },
       date: {
-        value: null,
+        value: moment().format(dateFormat),
         type: 'date',
         quickFilter: true,
         props: {
           label: i18n.tr('isite.cms.form.date'),
           mask: dateFormat
         }
-      },
+      }
     },
+  
 
     filterValues: {
       office: null,
       date: null
     },
 
+    modal: {
+      gammaOffice: false
+    },
   
 
     modelValues: {
-      quantity: null,
-      price: null,
-      reason: null
+      availability: {
+        quantity: null,
+        price: null,
+        reason: null 
+      },
+      gammaOffice: {
+        gammaId : null, 
+        tax: null, 
+        statusId: null
+      }
     },
 
     gammaOffice: [],
-    dailyAvailabilities: [],
-    selectedOffice: null,
-    selectedDate: null
+    dailyAvailabilities: [],   
+    showModal: false 
   })
 
   // Computed
   const computeds = {
     // key: computed(() => {})
-    showCalendar: computed(() => state.gammaOffice.length > 1 && !state.loading && state.filterValues.date ),
+
+    dynamicFields: computed(() =>  {      
+      return {
+        availability: {
+          quantity: {
+            type: 'input',
+            props: {
+              label: i18n.tr('isite.cms.form.quantity'),
+              type: 'number',
+              rules: [
+                val => !!val || i18n.tr('isite.cms.message.fieldRequired'),
+                val => /^[0-9]+$/.test(val) || 'Only digits allowed'
+              ],
+            }
+          },
+          price: {
+            type: 'input',
+            props: {
+              label: i18n.tr('isite.cms.form.price'),
+              type: 'number',
+              rules: [
+                val => !!val || i18n.tr('isite.cms.message.fieldRequired')
+              ],
+            }
+          },
+          reason: {
+            type: 'input',
+            props: {
+              label: i18n.tr('isite.cms.form.reason'),
+            }
+          } 
+        },
+
+        gammaOffice: {
+
+          officeId: {
+            value: state.filterValues.office,
+            type: 'select',             
+            props: {
+              label: i18n.tr('irentcar.cms.sidebar.adminOffices'),
+              readonly: true
+            }, 
+            loadOptions: {
+              apiRoute: 'apiRoutes.qrentcar.offices',              
+              select: {label: 'title', id: 'id'}
+            }
+          },
+
+          
+          gammaId: {
+            type: 'select', 
+            props: {
+              label: i18n.tr('irentcar.cms.sidebar.adminGammas')
+            }, 
+            loadOptions: {
+              apiRoute: 'apiRoutes.qrentcar.gammas',              
+              requestParams: {            
+                
+                filter: {
+                  id: {where: 'notIn', value: state.gammaOffice.map((x) => x.gamma.id)      }
+                }
+                
+              },
+              select: {label: 'title', id: 'id'}
+            }
+          },
+
+          statusId: {
+            value: 1,
+            type: 'select',
+            props: {
+              label: i18n.tr('isite.cms.form.status'),
+            },
+            loadOptions: {
+              apiRoute: 'apiRoutes.qrentcar.statuses'
+            }
+          },
+          
+          quantity: {
+            type: 'input',
+            props: {
+              label: i18n.tr('isite.cms.form.quantity'),
+              type: 'number',
+              rules: [
+                val => !!val || i18n.tr('isite.cms.message.fieldRequired'),
+                val => /^[0-9]+$/.test(val) || 'Only digits allowed'
+              ],
+            }
+          },
+          price: {
+            type: 'input',
+            props: {
+              label: i18n.tr('isite.cms.form.price'),
+              type: 'number',
+              rules: [
+                val => !!val || i18n.tr('isite.cms.message.fieldRequired')
+              ],
+            }
+          },
+          tax: {
+            type: 'input',
+            props: {
+              label: i18n.tr('isite.cms.form.tax'),
+              type: 'number',
+              rules: [
+                val => !!val || i18n.tr('isite.cms.message.fieldRequired'),
+                val => /^[0-9]+$/.test(val) || 'Only digits allowed'
+              ],
+            }
+          },
+
+
+
+        }
+      }
+    }),
+
+
+    extraActions: computed( () => {
+      return [
+      {
+        vIf: state.filterValues.office,
+        props: {
+          label: 'Add Gamma to Office',          
+          icon: 'fa-light fa-plus',
+          textColor: 'primary',
+          round: false,
+          rounded: true,
+          padding: '5px 15px',
+        },
+        action: () => methods.openModalGammaOffice()
+      }]
+    }),
+
+    showCalendar: computed(() => state.gammaOffice.length && !state.loading ),    
     nextDays: computed(() => methods.getNextDays())    
   }
 
@@ -106,16 +221,18 @@ export default function controller(props: any, emit: any) {
       //state.loading = true
 
     },
+    
+    /* Availability */
     setAvailabilityModal(availability){
-      state.modelValues.quantity = availability.quantity
-      state.modelValues.price = availability.price
-      state.modelValues.reason = availability.reason
+      state.modelValues.availability.quantity = availability.quantity
+      state.modelValues.availability.price = availability.price
+      state.modelValues.availability.reason = availability.reason
     },
     async updateAvailability(availability){
       state.loading = true
-      availability.quantity =  state.modelValues.quantity,
-      availability.price =  state.modelValues.price
-      availability.reason = state.modelValues.reason
+      availability.quantity =  state.modelValues.availability.quantity,
+      availability.price =  state.modelValues.availability.price
+      availability.reason = state.modelValues.availability.reason
 
       if(availability.id){
         await  services.updateAvailability(availability.id, {...availability})
@@ -139,16 +256,7 @@ export default function controller(props: any, emit: any) {
         reason : availability?.reason || '',
       }
       return result
-    },
-    async updateDynamicFilterValues(values){
-      if(state.filterValues.office != values.office){
-        state.filterValues.office = values.office
-        await methods.getGammaOffice()
-      }
-
-      state.filterValues.date = values.date
-      await methods.getDailyAvailabilities()
-    }, 
+    },    
     getDailyAvailabilities(){
       if(!state.filterValues.office || !state.filterValues.date) return
       state.loading = true
@@ -162,20 +270,53 @@ export default function controller(props: any, emit: any) {
         state.loading = false
       })
     },
-    async getGammaOffice(){
+
+    
+
+    /* gamma office */
+
+    openModalGammaOffice(){
+      /* init form*/
+      state.modelValues.gammaOffice.gammaId = null
+      state.modelValues.gammaOffice.tax = null
+      state.modal.gammaOffice = true
+    },
+
+    async getGammaOffices(){
       state.loading = true
       await services.getGammaOffice(state.filterValues.office).then(response => {
         if(response){
+          const head = {title: '', gamma: null } 
+          state.rows = [head, ...response]
           state.gammaOffice = response
-          state.gammaOffice.unshift({
-            title: '',
-            gamma: null
-          })
         }
       })
       state.loading = false
     },
+
+    async createGammaOffice(){
+      state.loading = true
+      await services.createGammaOffice(state.modelValues.gammaOffice).then( async (response)  => {
+        await methods.getGammaOffices()
+        await methods.getDailyAvailabilities()
+      })
+      state.loading = false
+    },
+
+    /* utils */
+    
+    async updateDynamicFilterValues(values){
+      if(state.filterValues.office != values.office){
+        state.filterValues.office = values.office
+        await methods.getGammaOffices()
+      }
+
+      state.filterValues.date = values.date
+      await methods.getDailyAvailabilities()
+    }, 
+
     getNextDays(){
+      if(!state.filterValues.date) return []
       const startDate = moment(state.filterValues.date)
       let nextDays = []
 

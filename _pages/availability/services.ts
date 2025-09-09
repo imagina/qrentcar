@@ -1,6 +1,7 @@
 import baseService from 'modules/qcrud/_services/baseService'
 
 export default {
+  /* gamma Office */
   getGammaOffice(criteria){
     return new Promise((resolve, reject) => {
       const requestParams = {
@@ -18,6 +19,15 @@ export default {
       }).catch(error => reject(error));
     })
   }, 
+
+  createGammaOffice(data, params = {params: {}}): Promise<any> {
+    return new Promise((resolve, reject) => {      
+      //Request
+      baseService.create('apiRoutes.qrentcar.gammaOffice', data).then(response => {
+        resolve(response)
+      }).catch(error => reject(error))
+    })
+  },
 
   /*availabilities*/
   getDailyAvailabilities(query){

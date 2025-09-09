@@ -1,18 +1,48 @@
 <template>
 	<div>
 		<div>
-			<page-actions          
+			<master-modal
+				v-model="modal.gammaOffice"
+				title="Add Gamma"
+				@hide="modal.gammaOffice = false"
+    	>
+				<q-form autocorrect="off" autocomplete="off" @submit="createGammaOffice()"
+																	@validation-error="$alert.error($tr('isite.cms.message.formInvalid'))">
+
+					<dynamic-field v-for="(field, keyField) in dynamicFields.gammaOffice" :key="keyField"
+							:field="field" v-model="modelValues.gammaOffice[field.name || keyField]"
+					/>
+					<!--Actions-->
+															<div class="justify-end row q-gutter-sm">
+																<q-btn :label="$tr('isite.cms.label.cancel')"
+																			no-caps color="grey" unelevated rounded v-close-popup />
+																<q-btn :label="$tr('isite.cms.label.save')" color="green"
+																			no-caps unelevated rounded v-close-popup type="submit" />
+															</div>
+				</q-form>
+			</master-modal>
+
+			<page-actions
 				:title="title"
+				:extra-actions="extraActions"
 				@refresh="getDailyAvailabilities()"
 				:dynamicFilter="dynamicFilter"
 				@updateDynamicFilterValues="filters => updateDynamicFilterValues(filters)"
 			/>
-		</div>				
+		</div>
+
+		<div class="tw-full">
+			<div v-if="!gammaOffice.length" class="tw-p-12 tw-justify-center tw-text-center">
+				<p>{{ $tr('isite.cms.message.searchNotFound') }}</p>
+			</div>
+		</div>
+
+
 		<div class="">
 			<div v-if="showCalendar" class=" tw-overflow-x-auto tw-py-4">
-				<template v-for="(item, index) in gammaOffice ">
+				<template v-for="(item, index) in rows ">
 					<div class="tw-grid tw-grid-flow-col">
-						<div class="tw-w-[160px] tw-border-2 tw-p-2">
+						<div class="tw-w-[160px] tw-min-h-[100px] tw-border-2 tw-p-2">
 							<span v-if="item?.gamma">
 								{{ item.gamma.title }}
 							</span>
@@ -52,9 +82,10 @@
 																	@validation-error="$alert.error($tr('isite.cms.message.formInvalid'))">
 														<div class="q-py-sm">
 															<!-- Field -->
-															<dynamic-field v-model="modelValues.quantity" :field="dynamicFields.quantity" />
-															<dynamic-field v-model="modelValues.price" :field="dynamicFields.price" />
-															<dynamic-field v-model="modelValues.reason" :field="dynamicFields.reason" />
+
+															<dynamic-field v-for="(field, keyField) in dynamicFields.availability" :key="keyField"
+																:field="field" v-model="modelValues.availability[field.name || keyField]"
+															/>
 															<!--Actions-->
 															<div class="justify-end row q-gutter-sm">
 																<q-btn :label="$tr('isite.cms.label.cancel')"
@@ -94,21 +125,10 @@
 					</div>
 				</template>
 				<div class="tw-grid tw-grid-flow-col">
-					<div class="tw-w-[160px] tw-p-2">
-						<q-btn 
-							label="link Gamma to office" 
-							color="green" 
-							size="md"
-							no-caps
-							unelevated
-							rounded 
-							@click="() => {}" 
-						/>
-					</div>
 				</div>
 			</div>
 		</div>
-			
+
 		<!--inner loading-->
 		<inner-loading :visible="loading" />
 	</div>
