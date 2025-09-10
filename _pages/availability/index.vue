@@ -2,7 +2,7 @@
 	<div>
 		<div>
 			<page-actions
-				:title="title"
+				:title="$tr('irentcar.cms.sidebar.adminAvailability')"
 				:extra-actions="extraActions"
 				@refresh="getDailyAvailabilities()"
 				:dynamicFilter="dynamicFilter"

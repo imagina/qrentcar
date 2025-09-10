@@ -5,10 +5,14 @@ export default {
         "adminGroup": "Rentcar",
         "adminOffices": "Oficinas",
         "adminGammas": "Gamas",
-        "adminExtras": "Extras"
+        "adminExtras": "Extras",
+        "adminAvailability": "Disponibilidad",
       },
       "label": {
-        "nextGamma": "Siguiente Gamma"
+        "office": "Oficina",
+        "gamma": "Gama",
+        "nextGamma": "Siguiente Gamma",
+        "addGammaOffice": "Agregar Gama"
       },
       "form": {
         "passengersNumber": "Numero de Pasajeros",
@@ -17,6 +21,7 @@ export default {
         "vehicleType": "Tipo de Vehiculo",
         "transmissionType": "Tipo de transmision",
         "fuelType": "Tipo de Combustible",
+        "reason": "Razón"
       },
       "newOffice": "Nueva Oficina",
       "updateOffice": "Actualizar Oficina",

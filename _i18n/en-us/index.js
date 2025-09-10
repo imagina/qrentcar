@@ -6,9 +6,13 @@ export default {
         "adminOffices": "Offices",
         "adminGammas": "Gammas",
         "adminExtras": "Extras",
+        "adminAvailability": "Availability",
       },
       "label": {
-        "nextGamma": "Next Gamma"
+        "office": "Office",
+        "gamma": "Gamma",
+        "nextGamma": "Next Gamma",
+        "addGammaOffice": "Add Gamma to Office"
       },
       "form": {
         "passengersNumber": "Passengers Number",
@@ -17,6 +21,7 @@ export default {
         "vehicleType": "Vehicle Type",
         "transmissionType": "Transmission Type",
         "fuelType": "Fuel Type",
+        "reason": "Reason"
       },
       "newOffice": "New Office",
       "updateOffice": "Update Office",

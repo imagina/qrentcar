@@ -100,7 +100,7 @@ export default function controller(props: any, emit: any) {
           reason: {
             type: 'input',
             props: {
-              label: i18n.tr('isite.cms.form.reason'),
+              label: i18n.tr('irentcar.cms.form.reason'),
             }
           }
         },
@@ -111,7 +111,7 @@ export default function controller(props: any, emit: any) {
             value: state.filterValues.office,
             type: 'select',
             props: {
-              label: i18n.tr('irentcar.cms.sidebar.adminOffices'),
+              label: i18n.tr('irentcar.cms.label.office'),
               readonly: true,
               vIf: !state.modelValues.gammaOffice.id
             },
@@ -121,12 +121,11 @@ export default function controller(props: any, emit: any) {
             }
           },
 
-
           gammaId: {
             value: null,
             type: 'select',
             props: {
-              label: i18n.tr('irentcar.cms.sidebar.adminGammas'),
+              label: i18n.tr('irentcar.cms.label.gamma'),
               vIf: !state.modelValues.gammaOffice.id,
             },
             loadOptions: {
@@ -178,10 +177,7 @@ export default function controller(props: any, emit: any) {
               label: i18n.tr('isite.cms.form.tax'),
               type: 'number'
             }
-          },
-
-
-
+          }
         }
       }
     }),
@@ -192,7 +188,7 @@ export default function controller(props: any, emit: any) {
       {
         vIf: state.filterValues.office,
         props: {
-          label: 'Add Gamma to Office',
+          label: i18n.tr('irentcar.cms.label.addGammaOffice'),
           icon: 'fa-light fa-plus',
           textColor: 'primary',
           round: false,
