@@ -19,7 +19,6 @@ export default function controller(props: any, emit: any) {
     loading: false,
     title: 'Ready Rent Cars',
     rows: [],
-    
 
     dynamicFilter: {
       office: {
@@ -43,42 +42,38 @@ export default function controller(props: any, emit: any) {
         }
       }
     },
-  
-
     filterValues: {
       office: null,
       date: null
     },
-
     modal: {
       gammaOffice: false
     },
-  
 
     modelValues: {
       availability: {
         quantity: null,
         price: null,
-        reason: null 
+        reason: null
       },
       gammaOffice: {
         id: null,
-        gammaId : null, 
-        tax: null, 
+        gammaId : null,
+        tax: null,
         statusId: null
       }
     },
 
     gammaOffice: [],
-    dailyAvailabilities: [],   
-    
+    dailyAvailabilities: [],
+
   })
 
   // Computed
   const computeds = {
     // key: computed(() => {})
 
-    dynamicFields: computed(() =>  {      
+    dynamicFields: computed(() =>  {
       return {
         availability: {
           quantity: {
@@ -107,39 +102,39 @@ export default function controller(props: any, emit: any) {
             props: {
               label: i18n.tr('isite.cms.form.reason'),
             }
-          } 
+          }
         },
 
         gammaOffice: {
 
           officeId: {
             value: state.filterValues.office,
-            type: 'select',             
+            type: 'select',
             props: {
               label: i18n.tr('irentcar.cms.sidebar.adminOffices'),
               readonly: true,
               vIf: !state.modelValues.gammaOffice.id
-            }, 
+            },
             loadOptions: {
-              apiRoute: 'apiRoutes.qrentcar.offices',              
+              apiRoute: 'apiRoutes.qrentcar.offices',
               select: {label: 'title', id: 'id'}
             }
           },
 
-          
+
           gammaId: {
             value: null,
-            type: 'select', 
+            type: 'select',
             props: {
-              label: i18n.tr('irentcar.cms.sidebar.adminGammas'), 
-              vIf: !state.modelValues.gammaOffice.id, 
-            }, 
+              label: i18n.tr('irentcar.cms.sidebar.adminGammas'),
+              vIf: !state.modelValues.gammaOffice.id,
+            },
             loadOptions: {
-              apiRoute: 'apiRoutes.qrentcar.gammas',              
-              requestParams: {                
+              apiRoute: 'apiRoutes.qrentcar.gammas',
+              requestParams: {
                 filter: {
                   id: {where: 'notIn', value: state.gammaOffice.map((x) => x.gamma.id)      }
-                }                
+                }
               },
               select: {label: 'title', id: 'id'}
             }
@@ -155,7 +150,7 @@ export default function controller(props: any, emit: any) {
               apiRoute: 'apiRoutes.qrentcar.statuses'
             }
           },
-          
+
           quantity: {
             type: 'input',
             props: {
@@ -197,7 +192,7 @@ export default function controller(props: any, emit: any) {
       {
         vIf: state.filterValues.office,
         props: {
-          label: 'Add Gamma to Office',          
+          label: 'Add Gamma to Office',
           icon: 'fa-light fa-plus',
           textColor: 'primary',
           round: false,
@@ -208,7 +203,7 @@ export default function controller(props: any, emit: any) {
       }]
     }),
 
-    showCalendar: computed(() => state.gammaOffice.length && !state.loading ),    
+    showCalendar: computed(() => state.gammaOffice.length && !state.loading ),
     nextDays: computed(() => methods.getNextDays())
   }
 
@@ -219,7 +214,7 @@ export default function controller(props: any, emit: any) {
       //state.loading = true
 
     },
-    
+
     /* Availability */
     setAvailabilityModal(availability){
       state.modelValues.availability.quantity = availability.quantity
@@ -254,7 +249,7 @@ export default function controller(props: any, emit: any) {
         reason : availability?.reason || '',
       }
       return result
-    },    
+    },
     getDailyAvailabilities(){
       if(!state.filterValues.office || !state.filterValues.date) return
       state.loading = true
@@ -269,22 +264,10 @@ export default function controller(props: any, emit: any) {
       })
     },
 
-    
-
     /* gamma office */
-
     openModalGammaOffice(gammaOffice = false){
       if (gammaOffice){
-        console.log(gammaOffice)
-
         state.modelValues.gammaOffice = {...gammaOffice}
-        /*
-        state.modelValues.gammaOffice.quantity = gammaOffice.quantity
-        state.modelValues.gammaOffice.price= gammaOffice.price
-        state.modelValues.gammaOffice.tax = gammaOffice.tax   
-        state.modelValues.gammaOffice.id = gammaOffice.id   
-        */
-
       } else {
         /* init form for new */
         state.modelValues.gammaOffice.quantity = null
@@ -300,7 +283,7 @@ export default function controller(props: any, emit: any) {
       state.loading = true
       await services.getGammaOffice(state.filterValues.office).then(response => {
         if(response){
-          const head = {title: '', gamma: null } 
+          const head = {title: '', gamma: null }
           state.rows = [head, ...response]
           state.gammaOffice = response
         }
@@ -309,7 +292,6 @@ export default function controller(props: any, emit: any) {
     },
 
     async createGammaOffice(){
-      console.log(state.modelValues.gammaOffice.id)
       state.loading = true
       if(state.modelValues.gammaOffice.id){
         await services.updateGammaOffice(state.modelValues.gammaOffice.id, state.modelValues.gammaOffice).then( async (response)  => {
@@ -329,7 +311,6 @@ export default function controller(props: any, emit: any) {
     },
 
     /* utils */
-    
     async updateDynamicFilterValues(values){
       if(state.filterValues.office != values.office){
         state.filterValues.office = values.office
@@ -338,7 +319,7 @@ export default function controller(props: any, emit: any) {
 
       state.filterValues.date = values.date
       await methods.getDailyAvailabilities()
-    }, 
+    },
 
     getNextDays(){
       if(!state.filterValues.date) return []
@@ -351,11 +332,11 @@ export default function controller(props: any, emit: any) {
           fullDate: day.format(dateFormat),
           label: day.format("ddd"),
           date: day.format("D"),
-          name: day.format("ddd")          
+          name: day.format("ddd")
         });
       }
       return nextDays
-    }, 
+    },
     isWeekend(date){
       const day =  moment(date).isoWeekday()
       return (day == 6 ||  day == 7)
