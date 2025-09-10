@@ -12,7 +12,7 @@
 			<!-- gamma office modal -->
 			<master-modal
 				v-model="modal.gammaOffice"
-				:title="modelValues.gammaOffice?.id ? `${$tr('irentcar.cms.updateGamma')} : ${modelValues.gammaOffice.gamma.title}` : 'Add gamma'"
+				:title="modelValues.gammaOffice?.id ? `${$tr('irentcar.cms.updateGamma')} : ${modelValues.gammaOffice.gamma.title}` : `${$tr('irentcar.cms.newGamma')}` "
 				@hide="modal.gammaOffice = false"
     	>
 			
@@ -36,6 +36,7 @@
 				<div class="tw-mt-8">
 					<!--Crud  gammaOfficeExtras-->
 					<crud 
+					 	v-if="modelValues.gammaOffice?.id"
 						:title="$tr('irentcar.cms.label.extras')"
 						:crud-data="import('src/modules/qrentcar/_crud/gammaOfficeExtras')" 
 						:custom-data="extrasCustomData"
