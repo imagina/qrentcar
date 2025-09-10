@@ -1,9 +1,10 @@
 <template>
 	<div>
 		<div>
+			<!-- gamma office modal -->
 			<master-modal
 				v-model="modal.gammaOffice"
-				title="Add Gamma"
+				:title="modelValues.gammaOffice?.id ? `Update gamma ${modelValues.gammaOffice.gamma.title}` : 'Add gamma'"
 				@hide="modal.gammaOffice = false"
     	>
 				<q-form autocorrect="off" autocomplete="off" @submit="createGammaOffice()"
@@ -13,14 +14,16 @@
 							:field="field" v-model="modelValues.gammaOffice[field.name || keyField]"
 					/>
 					<!--Actions-->
-															<div class="justify-end row q-gutter-sm">
-																<q-btn :label="$tr('isite.cms.label.cancel')"
-																			no-caps color="grey" unelevated rounded v-close-popup />
-																<q-btn :label="$tr('isite.cms.label.save')" color="green"
-																			no-caps unelevated rounded v-close-popup type="submit" />
-															</div>
+						<div class="justify-end row q-gutter-sm">
+							<q-btn :label="$tr('isite.cms.label.cancel')"
+										no-caps color="grey" unelevated rounded v-close-popup />
+							<q-btn :label="$tr('isite.cms.label.save')" color="green"
+										no-caps unelevated rounded v-close-popup type="submit" />
+						</div>
 				</q-form>
 			</master-modal>
+
+
 
 			<page-actions
 				:title="title"
@@ -42,10 +45,22 @@
 			<div v-if="showCalendar" class=" tw-overflow-x-auto tw-py-4">
 				<template v-for="(item, index) in rows ">
 					<div class="tw-grid tw-grid-flow-col">
-						<div class="tw-w-[160px] tw-min-h-[100px] tw-border-2 tw-p-2">
-							<span v-if="item?.gamma">
+						<div 
+							@click="openModalGammaOffice(item)"
+							class="tw-w-[160px] tw-border-2 tw-p-2 tw-cursor-pointer hover:tw-bg-gray-100 hover:tw-border-gray-200" 
+							:class="[item?.gamma ? 'tw-min-h-[100px]' : 'tw-h-[60px]', item?.gamma?.title ? '' : 'tw-bg-gray-100']"
+							
+						>
+							
+								<q-chip 
+									v-if="item?.gamma"
+									square
+									color="primary" 
+									text-color="white"
+								>
 								{{ item.gamma.title }}
-							</span>
+								</q-chip>
+							
 
 							<p v-if="item?.gamma">
 								{{ item.gamma.summary }}
@@ -55,7 +70,8 @@
 						<template v-for="(day, index) in nextDays ">
 							<div
 								v-if="item?.gamma"
-								class="tw-w-[100px] tw-items-center tw-justify-items-center tw-border-2 tw-p-2 tw-cursor-pointer hover:tw-bg-gray-100"
+								class="tw-w-[100px] tw-items-center tw-justify-items-center tw-border-2 tw-p-2 tw-cursor-pointer hover:tw-bg-sky-100 hover:tw-border-sky-300 "
+								:class="isWeekend(day.fullDate) ? 'tw-bg-slate-100' : ''"
 							>
 									<div class="tw-text-center">
 										{{ getAvailability(item, day.fullDate).reservedQuantity }}
@@ -104,7 +120,7 @@
 									<div class="tw-text-center">
 										{{ getAvailability(item, day.fullDate, 'quantity').quantity }}
 									</div>
-									<div class="tw-text-[14px] tw-text-center tw-p-2 tw-my-2 tw-bg-amber-100">
+									<div class="tw-text-[14px] tw-text-center tw-p-2 tw-my-2 tw-bg-amber-50">
 										{{ getAvailability(item, day.fullDate).price || 0 }}
 									</div>
 									<q-tooltip v-if="getAvailability(item, day.fullDate).reason">
@@ -113,13 +129,17 @@
 
 							</div>
 
-							<div v-else class="tw-w-[100px] tw-border-2 tw-p-4">
-								<div class="tw-text-center tw-text-zinc-500">
+							<div 
+								v-else 
+									class="tw-w-[100px] tw-border-2 tw-px-4 tw-py-2 tw-h-[60px] "
+									:class="isWeekend(day.fullDate) ? 'tw-bg-slate-200' : 'tw-bg-slate-100'"
+								>
+								<div class="tw-text-center tw-font-[500] tw-text-zinc-500">
 									{{ day.label }}
 								</div>
-								<div class="tw-text-center tw-text-zinc-500">
+								<div class="tw-text-center tw-font-[800] tw-text-zinc-500">
 									{{ day.date }}
-								</div>
+								</div> 
 							</div>
 						</template>
 					</div>

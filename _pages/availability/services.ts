@@ -29,6 +29,17 @@ export default {
     })
   },
 
+  updateGammaOffice(criteria, data, params = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const requestParams = {
+        ...params,
+      }
+      baseService.update('apiRoutes.qrentcar.gammaOffice', criteria, data, requestParams).then(response => {
+        resolve(response.data)
+      }).catch(error => reject(error))
+    })
+  },
+
   /*availabilities*/
   getDailyAvailabilities(query){
     return new Promise((resolve, reject) => {

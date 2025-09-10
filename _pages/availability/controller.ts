@@ -62,6 +62,7 @@ export default function controller(props: any, emit: any) {
         reason: null 
       },
       gammaOffice: {
+        id: null,
         gammaId : null, 
         tax: null, 
         statusId: null
@@ -70,7 +71,7 @@ export default function controller(props: any, emit: any) {
 
     gammaOffice: [],
     dailyAvailabilities: [],   
-    showModal: false 
+    
   })
 
   // Computed
@@ -116,7 +117,8 @@ export default function controller(props: any, emit: any) {
             type: 'select',             
             props: {
               label: i18n.tr('irentcar.cms.sidebar.adminOffices'),
-              readonly: true
+              readonly: true,
+              vIf: !state.modelValues.gammaOffice.id
             }, 
             loadOptions: {
               apiRoute: 'apiRoutes.qrentcar.offices',              
@@ -126,18 +128,18 @@ export default function controller(props: any, emit: any) {
 
           
           gammaId: {
+            value: null,
             type: 'select', 
             props: {
-              label: i18n.tr('irentcar.cms.sidebar.adminGammas')
+              label: i18n.tr('irentcar.cms.sidebar.adminGammas'), 
+              vIf: !state.modelValues.gammaOffice.id, 
             }, 
             loadOptions: {
               apiRoute: 'apiRoutes.qrentcar.gammas',              
-              requestParams: {            
-                
+              requestParams: {                
                 filter: {
                   id: {where: 'notIn', value: state.gammaOffice.map((x) => x.gamma.id)      }
-                }
-                
+                }                
               },
               select: {label: 'title', id: 'id'}
             }
@@ -179,11 +181,7 @@ export default function controller(props: any, emit: any) {
             type: 'input',
             props: {
               label: i18n.tr('isite.cms.form.tax'),
-              type: 'number',
-              rules: [
-                val => !!val || i18n.tr('isite.cms.message.fieldRequired'),
-                val => /^[0-9]+$/.test(val) || 'Only digits allowed'
-              ],
+              type: 'number'
             }
           },
 
@@ -211,7 +209,7 @@ export default function controller(props: any, emit: any) {
     }),
 
     showCalendar: computed(() => state.gammaOffice.length && !state.loading ),    
-    nextDays: computed(() => methods.getNextDays())    
+    nextDays: computed(() => methods.getNextDays())
   }
 
   // Methods
@@ -275,10 +273,26 @@ export default function controller(props: any, emit: any) {
 
     /* gamma office */
 
-    openModalGammaOffice(){
-      /* init form*/
-      state.modelValues.gammaOffice.gammaId = null
-      state.modelValues.gammaOffice.tax = null
+    openModalGammaOffice(gammaOffice = false){
+      if (gammaOffice){
+        console.log(gammaOffice)
+
+        state.modelValues.gammaOffice = {...gammaOffice}
+        /*
+        state.modelValues.gammaOffice.quantity = gammaOffice.quantity
+        state.modelValues.gammaOffice.price= gammaOffice.price
+        state.modelValues.gammaOffice.tax = gammaOffice.tax   
+        state.modelValues.gammaOffice.id = gammaOffice.id   
+        */
+
+      } else {
+        /* init form for new */
+        state.modelValues.gammaOffice.quantity = null
+        state.modelValues.gammaOffice.price = null
+        state.modelValues.gammaOffice.gammaId = null
+        state.modelValues.gammaOffice.tax = null
+        state.modelValues.gammaOffice.id = null
+      }
       state.modal.gammaOffice = true
     },
 
@@ -295,11 +309,22 @@ export default function controller(props: any, emit: any) {
     },
 
     async createGammaOffice(){
+      console.log(state.modelValues.gammaOffice.id)
       state.loading = true
-      await services.createGammaOffice(state.modelValues.gammaOffice).then( async (response)  => {
-        await methods.getGammaOffices()
-        await methods.getDailyAvailabilities()
-      })
+      if(state.modelValues.gammaOffice.id){
+        await services.updateGammaOffice(state.modelValues.gammaOffice.id, state.modelValues.gammaOffice).then( async (response)  => {
+          await methods.getGammaOffices()
+          await methods.getDailyAvailabilities()
+        })
+      } else {
+        if(state.modelValues.gammaOffice.id){
+          delete state.modelValues.gammaOffice.id
+        }
+        await services.createGammaOffice(state.modelValues.gammaOffice).then( async (response)  => {
+          await methods.getGammaOffices()
+          await methods.getDailyAvailabilities()
+        })
+      }
       state.loading = false
     },
 
@@ -326,10 +351,14 @@ export default function controller(props: any, emit: any) {
           fullDate: day.format(dateFormat),
           label: day.format("ddd"),
           date: day.format("D"),
-          name: day.format("ddd")
+          name: day.format("ddd")          
         });
       }
       return nextDays
+    }, 
+    isWeekend(date){
+      const day =  moment(date).isoWeekday()
+      return (day == 6 ||  day == 7)
     }
   }
 
