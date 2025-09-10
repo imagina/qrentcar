@@ -176,7 +176,10 @@ export default function controller(props: any, emit: any) {
             type: 'input',
             props: {
               label: i18n.tr('isite.cms.form.tax'),
-              type: 'number'
+              type: 'number',
+              rules: [
+                val => !!val || i18n.tr('isite.cms.message.fieldRequired')
+              ],
             }
           }
         }
