@@ -11,6 +11,8 @@ export default {
       "label": {
         "office": "Oficina",
         "gamma": "Gama",
+        "extra": "Extra",
+        "extras": "Extras",
         "nextGamma": "Siguiente Gamma",
         "addGammaOffice": "Agregar Gama"
       },

@@ -11,6 +11,7 @@ export default {
   gammas: `${urlBase}/gammas`,
   extras: `${urlBase}/extras`,
   gammaOffice: `${urlBase}/gamma-office`,
+  gammaOfficeExtra: `${urlBase}/gamma-office-extra`,
   dailyAvailabilities: `${urlBase}/daily-availabilities`,
 
   transmissionTypes: `${urlBase}/transmission-types`,

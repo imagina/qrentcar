@@ -11,6 +11,7 @@ export default function controller(props: any, emit: any) {
   // Refs
   const refs = {
     // refKey: ref(defaultValue)
+    gammaOfficeExtra: ref()
   }
 
   // States
@@ -197,6 +198,60 @@ export default function controller(props: any, emit: any) {
         },
         action: () => methods.openModalGammaOffice()
       }]
+    }),
+
+    extrasCustomData: computed(() => {
+      return {
+        read: {
+          requestParams: {
+            include: 'extra',
+            filter: {gammaOfficeId: state.modelValues.gammaOffice?.id }
+          },          
+        },
+        formLeft: { 
+          gammaOfficeId: {
+            value: state.modelValues.gammaOffice?.id,
+            type: 'select',
+            props: {
+              label: i18n.tr('irentcar.cms.label.gamma'),
+              readonly: true,
+              options: [
+                { label: state.modelValues.gammaOffice?.gamma.title, 
+                  value: state.modelValues.gammaOffice?.id 
+                }
+              ]
+            }
+          },
+          extraId: {
+            value: null,
+            type: 'select',
+            props: {
+              label: i18n.tr('irentcar.cms.label.extra'),
+              readOnly: true
+            },
+            loadOptions: {
+              apiRoute: 'apiRoutes.qrentcar.extras',
+              select: {label: 'title', id: 'id'},
+             
+              requestParams: {
+                filter: {
+                  gamma: {where: 'notIn', value: state.gammaOffice.map((x) => x.gamma.id)      }
+                }
+              },             
+            }
+          },
+          price: {
+            value: '',
+            type: 'input',
+            props: {
+              label: `${i18n.tr('isite.cms.form.price')}*`,
+              rules: [
+                val => !!val || i18n.tr('isite.cms.message.fieldRequired')
+              ]
+            }
+          },		
+        }        
+      }
     }),
 
     showCalendar: computed(() => state.gammaOffice.length && !state.loading ),

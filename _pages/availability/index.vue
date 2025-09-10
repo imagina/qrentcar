@@ -15,21 +15,38 @@
 				:title="modelValues.gammaOffice?.id ? `${$tr('irentcar.cms.updateGamma')} : ${modelValues.gammaOffice.gamma.title}` : 'Add gamma'"
 				@hide="modal.gammaOffice = false"
     	>
-				<q-form  autocorrect="off" autocomplete="off" 
-					@submit="createGammaOffice()" 
-					@validation-error="$alert.error($tr('isite.cms.message.formInvalid'))"
-				>
-					<dynamic-field v-for="(field, keyField) in dynamicFields.gammaOffice" :key="keyField"
-							:field="field" v-model="modelValues.gammaOffice[field.name || keyField]"
+			
+				<div>
+					<q-form  autocorrect="off" autocomplete="off" 
+						@submit="createGammaOffice()" 
+						@validation-error="$alert.error($tr('isite.cms.message.formInvalid'))"
+					>
+						<dynamic-field v-for="(field, keyField) in dynamicFields.gammaOffice" :key="keyField"
+								:field="field" v-model="modelValues.gammaOffice[field.name || keyField]"
+						/>
+						<!--Actions-->
+						<div class="justify-end row q-gutter-sm">
+							<q-btn :label="$tr('isite.cms.label.cancel')"
+										no-caps color="grey" unelevated rounded v-close-popup />
+							<q-btn :label="$tr('isite.cms.label.save')" color="green"
+										no-caps unelevated rounded v-close-popup type="submit" />
+						</div>
+					</q-form>
+				</div>
+				<div class="tw-mt-8">
+					<!--Crud  gammaOfficeExtras-->
+					<crud 
+						:title="$tr('irentcar.cms.label.extras')"
+						:crud-data="import('src/modules/qrentcar/_crud/gammaOfficeExtras')" 
+						:custom-data="extrasCustomData"
+						ref="gammaOfficeExtra"
+						@createdData="(layout) => {}"
+						@updated="() => {}"
+						@deleted="() => {}"
+						@update:modelValue ="(value) => { console.log(value)}"
 					/>
-					<!--Actions-->
-					<div class="justify-end row q-gutter-sm">
-						<q-btn :label="$tr('isite.cms.label.cancel')"
-									no-caps color="grey" unelevated rounded v-close-popup />
-						<q-btn :label="$tr('isite.cms.label.save')" color="green"
-									no-caps unelevated rounded v-close-popup type="submit" />
-					</div>
-				</q-form>
+				</div>
+			
 			</master-modal>
 		</div>
 
