@@ -231,13 +231,7 @@ export default function controller(props: any, emit: any) {
             },
             loadOptions: {
               apiRoute: 'apiRoutes.qrentcar.extras',
-              select: {label: 'title', id: 'id'},
-             
-              requestParams: {
-                filter: {
-                  gamma: {where: 'notIn', value: state.gammaOffice.map((x) => x.gamma.id)      }
-                }
-              },             
+              select: {label: 'title', id: 'id'}
             }
           },
           price: {
