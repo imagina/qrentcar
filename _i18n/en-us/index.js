@@ -7,6 +7,7 @@ export default {
         "adminGammas": "Gammas",
         "adminExtras": "Extras",
         "adminAvailability": "Availability",
+        "adminReservations": "Reservations",
       },
       "label": {
         "office": "Office",
@@ -14,7 +15,8 @@ export default {
         "extra": "Extra",
         "extras": "Extras",
         "nextGamma": "Next Gamma",
-        "addGammaOffice": "Add Gamma to Office"
+        "addGammaOffice": "Add Gamma to Office",
+        "reservations": "Reservations"
       },
       "form": {
         "passengersNumber": "Passengers Number",
@@ -23,7 +25,9 @@ export default {
         "vehicleType": "Vehicle Type",
         "transmissionType": "Transmission Type",
         "fuelType": "Fuel Type",
-        "reason": "Reason"
+        "reason": "Reason",
+        "pickupDate": "Pick up Date",
+        "dropoffDate": "Drop off Date"
       },
       "newOffice": "New Office",
       "updateOffice": "Update Office",

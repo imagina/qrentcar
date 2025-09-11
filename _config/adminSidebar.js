@@ -9,7 +9,8 @@ export default [
         pages.qrentcar.offices,
         pages.qrentcar.gammas,
         pages.qrentcar.extras,
-        pages.qrentcar.availability
+        pages.qrentcar.availability,
+        pages.qrentcar.reservations
       ]
     },
   ]

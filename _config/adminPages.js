@@ -54,17 +54,29 @@ export default {
     activated: true,
     authenticated: true,
     path: '/rentcar/availability/index',
-    name: 'qrentcar.admin.availability',    
+    name: 'qrentcar.admin.availability',
     page: () => import('modules/qrentcar/_pages/availability'),
     layout: () => import('layouts/master.vue'),
     title: 'irentcar.cms.sidebar.adminAvailability',
+    icon: 'fa-light fa-table',
+    subHeader: {
+      refresh: true,
+    }
+  },
+
+  reservations: {
+    permission: 'irentcar.reservations.manage',
+    activated: true,
+    authenticated: true,
+    path: '/rentcar/reservations/index',
+    name: 'qrentcar.admin.reservations',
+    crud : import('modules/qrentcar/_crud/reservations'),
+    page: () => import('modules/qcrud/_pages/admin/crudPage'),
+    layout: () => import('layouts/master.vue'),
+    title: 'irentcar.cms.sidebar.adminReservations',
     icon: 'fa-light fa-calendar-days',
     subHeader: {
       refresh: true,
     }
   }
-  
-
-
-  
 }

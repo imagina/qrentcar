@@ -13,9 +13,9 @@ export default {
   gammaOffice: `${urlBase}/gamma-office`,
   gammaOfficeExtra: `${urlBase}/gamma-office-extra`,
   dailyAvailabilities: `${urlBase}/daily-availabilities`,
-
+  reservations: `${urlBase}/reservations`,
+  reservationStatuses: `${urlBase}/reservation-statuses`,
   transmissionTypes: `${urlBase}/transmission-types`,
   fuelTypes: `${urlBase}/fuel-types`,
-  vehicleTypes: `${urlBase}/vehicle-types`,
-
+  vehicleTypes: `${urlBase}/vehicle-types`
 }

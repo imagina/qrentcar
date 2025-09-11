@@ -128,6 +128,9 @@ export default function controller(props: any, emit: any) {
             props: {
               label: i18n.tr('irentcar.cms.label.gamma'),
               vIf: !state.modelValues.gammaOffice.id,
+              rules: [
+                val => !!val || i18n.tr('isite.cms.message.fieldRequired'),
+              ],
             },
             loadOptions: {
               apiRoute: 'apiRoutes.qrentcar.gammas',
@@ -152,6 +155,7 @@ export default function controller(props: any, emit: any) {
           },
 
           quantity: {
+            value: '0',
             type: 'input',
             props: {
               label: i18n.tr('isite.cms.form.quantity'),
@@ -163,6 +167,7 @@ export default function controller(props: any, emit: any) {
             }
           },
           price: {
+            value: '0',
             type: 'input',
             props: {
               label: i18n.tr('isite.cms.form.price'),
@@ -173,6 +178,7 @@ export default function controller(props: any, emit: any) {
             }
           },
           tax: {
+            value: '0',
             type: 'input',
             props: {
               label: i18n.tr('isite.cms.form.tax'),
@@ -209,9 +215,9 @@ export default function controller(props: any, emit: any) {
           requestParams: {
             include: 'extra',
             filter: {gammaOfficeId: state.modelValues.gammaOffice?.id }
-          },          
+          },
         },
-        formLeft: { 
+        formLeft: {
           gammaOfficeId: {
             value: state.modelValues.gammaOffice?.id,
             type: 'select',
@@ -219,8 +225,8 @@ export default function controller(props: any, emit: any) {
               label: i18n.tr('irentcar.cms.label.gamma'),
               readonly: true,
               options: [
-                { label: state.modelValues.gammaOffice?.gamma.title, 
-                  value: state.modelValues.gammaOffice?.id 
+                { label: state.modelValues.gammaOffice?.gamma.title,
+                  value: state.modelValues.gammaOffice?.id
                 }
               ]
             }
@@ -246,11 +252,10 @@ export default function controller(props: any, emit: any) {
                 val => !!val || i18n.tr('isite.cms.message.fieldRequired')
               ]
             }
-          },		
-        }        
+          },
+        }
       }
     }),
-
     showCalendar: computed(() => state.gammaOffice.length && !state.loading ),
     nextDays: computed(() => methods.getNextDays())
   }
@@ -298,11 +303,11 @@ export default function controller(props: any, emit: any) {
       }
       return result
     },
-    getDailyAvailabilities(){
+    async getDailyAvailabilities(){
       if(!state.filterValues.office || !state.filterValues.date) return
       state.loading = true
       const from = state.filterValues.date
-      services.getDailyAvailabilities({
+      await services.getDailyAvailabilities({
         officeId: state.filterValues.office.id,
         from,
         to: moment(from).add(30, "days").format(dateFormat),
@@ -356,6 +361,22 @@ export default function controller(props: any, emit: any) {
         })
       }
       state.loading = false
+    },
+
+    /* reservations */
+    getReservationsParams(gammaOfficeId, date){
+      return {
+        read: {
+          requestParams: {
+            include: 'pickupOffice,dropoffOffice',
+            filter: {
+              pickupDate: {where: 'date', value: date, operator: '<=' },
+              dropoffDate: {where: 'date', value: date, operator: '>=' },
+              gammaOfficeI: gammaOfficeId,
+            }
+          },
+        },
+      }
     },
 
     /* utils */

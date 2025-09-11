@@ -5,5 +5,6 @@ export default {
     offices: 'offices',
     gammas: 'gammas',
     extras: 'extras',
+    reservations: 'reservations',
   },
 }
