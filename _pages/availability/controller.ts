@@ -11,7 +11,8 @@ export default function controller(props: any, emit: any) {
   // Refs
   const refs = {
     // refKey: ref(defaultValue)
-    gammaOfficeExtra: ref()
+    gammaOfficeExtra: ref(),
+    gammaOfficeForm: ref()
   }
 
   // States
@@ -47,8 +48,20 @@ export default function controller(props: any, emit: any) {
       office: null,
       date: null
     },
-    modal: {
-      gammaOffice: false
+
+    modalGammaOffice: {
+      show: false,
+      actions : [
+        {
+          props: { label: i18n.tr("isite.cms.label.cancel"), color: "green" },
+          action: () => state.modalGammaOffice.show = false
+        },
+        {
+          props: { label: i18n.tr("isite.cms.label.save"), color: "green" },
+          action: () => refs.gammaOfficeForm.value.submit()
+        },
+
+      ]
     },
 
     modelValues: {
@@ -114,7 +127,7 @@ export default function controller(props: any, emit: any) {
             props: {
               label: i18n.tr('irentcar.cms.label.office'),
               readonly: true,
-              vIf: !state.modelValues.gammaOffice.id
+              ///vIf: state.filterValues.office
             },
             loadOptions: {
               apiRoute: 'apiRoutes.qrentcar.offices',
@@ -219,7 +232,7 @@ export default function controller(props: any, emit: any) {
         },
         formLeft: {
           gammaOfficeId: {
-            value: state.modelValues.gammaOffice?.id,
+            value: null,
             type: 'select',
             props: {
               label: i18n.tr('irentcar.cms.label.gamma'),
@@ -318,7 +331,7 @@ export default function controller(props: any, emit: any) {
     },
 
     /* gamma office */
-    openModalGammaOffice(gammaOffice = false){
+    async openModalGammaOffice(gammaOffice = false){
       if (gammaOffice){
         state.modelValues.gammaOffice = {...gammaOffice}
       } else {
@@ -329,7 +342,7 @@ export default function controller(props: any, emit: any) {
         state.modelValues.gammaOffice.tax = null
         state.modelValues.gammaOffice.id = null
       }
-      state.modal.gammaOffice = true
+      state.modalGammaOffice.show = true
     },
 
     async getGammaOffices(){
@@ -345,22 +358,25 @@ export default function controller(props: any, emit: any) {
     },
 
     async createGammaOffice(){
-      state.loading = true
-      if(state.modelValues.gammaOffice.id){
-        await services.updateGammaOffice(state.modelValues.gammaOffice.id, state.modelValues.gammaOffice).then( async (response)  => {
-          await methods.getGammaOffices()
-          await methods.getDailyAvailabilities()
-        })
-      } else {
+      if( await refs.gammaOfficeForm.value.validate()){
+        state.modalGammaOffice.show = false
+        state.loading = true
         if(state.modelValues.gammaOffice.id){
-          delete state.modelValues.gammaOffice.id
+          await services.updateGammaOffice(state.modelValues.gammaOffice.id, state.modelValues.gammaOffice).then( async (response)  => {
+            await methods.getGammaOffices()
+            await methods.getDailyAvailabilities()
+          })
+        } else {
+          if(state.modelValues.gammaOffice.id){
+            delete state.modelValues.gammaOffice.id
+          }
+          await services.createGammaOffice(state.modelValues.gammaOffice).then( async (response)  => {
+            await methods.getGammaOffices()
+            await methods.getDailyAvailabilities()
+          })
         }
-        await services.createGammaOffice(state.modelValues.gammaOffice).then( async (response)  => {
-          await methods.getGammaOffices()
-          await methods.getDailyAvailabilities()
-        })
+        state.loading = false
       }
-      state.loading = false
     },
 
     /* reservations */
@@ -383,6 +399,7 @@ export default function controller(props: any, emit: any) {
     async updateDynamicFilterValues(values){
       if(state.filterValues.office != values.office){
         state.filterValues.office = values.office
+        state.modelValues.gammaOffice.officeId = values.office
         await methods.getGammaOffices()
       }
 

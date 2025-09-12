@@ -11,26 +11,22 @@
 
 			<!-- gamma office modal -->
 			<master-modal
-				v-model="modal.gammaOffice"
+				v-model="modalGammaOffice.show"
 				:title="modelValues.gammaOffice?.id ? `${$tr('irentcar.cms.updateGamma')} : ${modelValues.gammaOffice.gamma.title}` : `${$tr('irentcar.cms.newGamma')}` "
-				@hide="modal.gammaOffice = false"
+				@hide="modalGammaOffice.show = false"
+				:actions="modalGammaOffice.actions"
     	>
 
 				<div>
-					<q-form  autocorrect="off" autocomplete="off"
+					<q-form
+						ref="gammaOfficeForm"
+						autocorrect="off" autocomplete="off"
 						@submit="createGammaOffice()"
 						@validation-error="$alert.error($tr('isite.cms.message.formInvalid'))"
 					>
 						<dynamic-field v-for="(field, keyField) in dynamicFields.gammaOffice" :key="keyField"
 								:field="field" v-model="modelValues.gammaOffice[field.name || keyField]"
 						/>
-						<!--Actions-->
-						<div class="justify-end row q-gutter-sm">
-							<q-btn :label="$tr('isite.cms.label.cancel')"
-										no-caps color="grey" unelevated rounded v-close-popup />
-							<q-btn :label="$tr('isite.cms.label.save')" color="green"
-										no-caps unelevated rounded v-close-popup type="submit" />
-						</div>
 					</q-form>
 				</div>
 				<div class="tw-mt-8">
