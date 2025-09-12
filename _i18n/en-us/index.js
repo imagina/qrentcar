@@ -27,7 +27,9 @@ export default {
         "fuelType": "Fuel Type",
         "reason": "Reason",
         "pickupDate": "Pick up Date",
-        "dropoffDate": "Drop off Date"
+        "dropoffDate": "Drop off Date",
+        "pickupOffice": "Pick up Office",
+        "dropoffOffice": "Drop off Office"
       },
       "newOffice": "New Office",
       "updateOffice": "Update Office",
