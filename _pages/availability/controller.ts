@@ -53,7 +53,7 @@ export default function controller(props: any, emit: any) {
       show: false,
       actions : [
         {
-          props: { label: i18n.tr("isite.cms.label.cancel"), color: "green" },
+          props: { label: i18n.tr("isite.cms.label.cancel")},
           action: () => state.modalGammaOffice.show = false
         },
         {
@@ -232,7 +232,7 @@ export default function controller(props: any, emit: any) {
         },
         formLeft: {
           gammaOfficeId: {
-            value: null,
+            value: state.modelValues.gammaOffice.id,
             type: 'select',
             props: {
               label: i18n.tr('irentcar.cms.label.gamma'),
