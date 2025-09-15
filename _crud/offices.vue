@@ -206,8 +206,8 @@ export default {
           return new Promise(resolve => {
             //replace name value
             if (data.options) {
-              data.locatable.lat = data.options.map?.lat,
-              data.locatable.lng = data.options.map?.lng
+              data.locatable.latitude = data.options.map?.lat,
+              data.locatable.longitude = data.options.map?.lng
             }
             //Response
             resolve(data);
