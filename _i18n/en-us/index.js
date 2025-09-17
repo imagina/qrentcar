@@ -2,7 +2,7 @@ export default {
   "irentcar": {
     "cms": {
       "sidebar": {
-        "adminGroup": "Rentcar",
+        "adminGroup": "Car Rental",
         "adminOffices": "Offices",
         "adminGammas": "Gammas",
         "adminExtras": "Extras",
