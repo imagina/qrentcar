@@ -29,7 +29,8 @@ export default {
         "pickupDate": "Fecha de Recogida",
         "dropoffDate": "Fecha de Entrega",
         "pickupOffice": "Oficina de Recogida",
-        "dropoffOffice": "Oficina de Entrega"
+        "dropoffOffice": "Oficina de Entrega",
+        "rentalDays": "Dias de Alquiler"
       },
       "newOffice": "Nueva Oficina",
       "updateOffice": "Actualizar Oficina",

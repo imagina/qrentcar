@@ -29,7 +29,8 @@ export default {
         "pickupDate": "Pick up Date",
         "dropoffDate": "Drop off Date",
         "pickupOffice": "Pick up Office",
-        "dropoffOffice": "Drop off Office"
+        "dropoffOffice": "Drop off Office",
+        "rentalDays": "Rental Days"
       },
       "newOffice": "New Office",
       "updateOffice": "Update Office",
