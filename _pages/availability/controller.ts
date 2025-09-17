@@ -388,7 +388,7 @@ export default function controller(props: any, emit: any) {
             filter: {
               pickupDate: {where: 'date', value: date, operator: '<=' },
               dropoffDate: {where: 'date', value: date, operator: '>=' },
-              gammaOfficeI: gammaOfficeId,
+              gammaOfficeId: gammaOfficeId,
             }
           },
         },
