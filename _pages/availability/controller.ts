@@ -384,7 +384,7 @@ export default function controller(props: any, emit: any) {
       return {
         read: {
           requestParams: {
-            include: 'pickupOffice,dropoffOffice',
+            include: 'pickupOffice,dropoffOffice,user',
             filter: {
               pickupDate: {where: 'date', value: date, operator: '<=' },
               dropoffDate: {where: 'date', value: date, operator: '>=' },

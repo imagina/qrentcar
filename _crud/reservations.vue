@@ -21,16 +21,16 @@ export default {
               name: 'id', label: this.$tr('isite.cms.form.id'), field: 'id', style: 'width: 50px'
             },
             {
-              name: 'pickupDate', label: this.$tr('irentcar.cms.form.pickupDate'), field: 'pickupDate', align: 'rigth',
-              format: val => val ? moment(val).format('l') : '-'
+              name: 'pickupDate', label: this.$tr('irentcar.cms.form.pickupDate'), field: 'pickupDate', align: 'center',
+              format: val => val ?  `${moment(val).format('l')} ${moment(val).format('LT')} `  : '-'
             },
             {
               name: 'pickupOffice', label: this.$tr('irentcar.cms.form.pickupOffice'), field: 'pickupOffice', align: 'rigth',
               format: val => val ? val.title : '-'
             },
             {
-              name: 'dropoffDate', label: this.$tr('irentcar.cms.form.dropoffDate'), field: 'dropoffDate', align: 'rigth',
-              format: val => val ? moment(val).format('l') : '-'
+              name: 'dropoffDate', label: this.$tr('irentcar.cms.form.dropoffDate'), field: 'dropoffDate', align: 'center',
+              format: val => val ?  `${moment(val).format('l')} ${moment(val).format('LT')} `  : '-'
             },
 
             {
@@ -39,13 +39,19 @@ export default {
             },
 
             {
-              name: 'rentalDays', label: this.$tr('isite.cms.form.status'), field: 'rentalDays', align: 'rigth'
+              name: 'rentalDays', label: this.$tr('irentcar.cms.form.rentalDays'), field: 'rentalDays', align: 'center'
             },
 
             {
               name: 'statusId', label: this.$tr('isite.cms.form.status'), field: 'status', align: 'rigth',
               format: val => val ? val.title : '-'
             },
+
+            {
+              name: 'user', label: this.$tr('isite.cms.label.user'), field: 'user', align: 'rigth',
+              format: val => val ? `${val.fullName} : ${val.email}` : '-'
+            },
+
             {
               name: 'gammaData', label: this.$tr('irentcar.cms.label.gamma'), field: 'gammaData', align: 'rigth',
               format: val => val ? val.title : '-'
@@ -58,7 +64,6 @@ export default {
             {
               name: 'extrasData', label: this.$tr('irentcar.cms.label.extras'), field: 'extrasData', align: 'rigth',
               format: val =>  val.map(x =>  `${x.extra.title} : ${x.price}`).join(', ')
-
             },
 
             /*
@@ -76,8 +81,9 @@ export default {
             }
           ],
           requestParams: {
-              include: 'pickupOffice,dropoffOffice',
-              filter: {order: {field: 'pickupDate', way: 'desc'}}},
+              include: 'pickupOffice,dropoffOffice,user',
+              filter: {order: {field: 'pickupDate', way: 'desc'}}
+            },
           filters: {
             officeId: {
               value: null,
