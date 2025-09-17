@@ -6,11 +6,11 @@ export default [
       title: 'irentcar.cms.sidebar.adminGroup',
       icon: 'fa-light fa-car-side',
       children: [
-        pages.qrentcar.offices,
+        pages.qrentcar.availability,
+        pages.qrentcar.reservations,
         pages.qrentcar.gammas,
         pages.qrentcar.extras,
-        pages.qrentcar.reservations,
-        pages.qrentcar.availability
+        pages.qrentcar.offices
       ]
     },
   ]
