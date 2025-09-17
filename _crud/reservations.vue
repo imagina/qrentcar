@@ -4,10 +4,10 @@
 import moment from 'moment';
 
 const colors = [
-  'tw-bg-orange-400',
-  'tw-bg-sky-400',
-  'tw-bg-red-600',
-  'tw-bg-green-400',
+  'tw-text-orange-400',
+  'tw-text-sky-400',
+  'tw-text-red-600',
+  'tw-text-green-400',
 ];
 
 export default {
@@ -52,7 +52,7 @@ export default {
 
             {
               name: 'statusId', label: this.$tr('isite.cms.form.status'), field: 'status', align: 'rigth',
-              format: val => val ?  `<div class="${colors[val.id]} tw-p-2 tw-rounded-md tw-text-white">${val.title}</div>`    : '-'
+              format: val => val ?  `<div class="${colors[val.id]} tw-p-2 tw-rounded-md tw-font-[600]">${val.title}</div>` : '-'
             },
 
             {
@@ -71,7 +71,7 @@ export default {
 
             {
               name: 'extrasData', label: this.$tr('irentcar.cms.label.extras'), field: 'extrasData', align: 'rigth',
-              format: val =>  val.map(x =>  x.extra.title).join(', ')
+              format: val =>  val && val.length ? val.map(x => x.extra.title).join(', ') : '-'
             },
 
             /*
