@@ -96,8 +96,7 @@ export default function controller(props: any, emit: any) {
               label: i18n.tr('isite.cms.form.quantity'),
               type: 'number',
               rules: [
-                val => !!val || i18n.tr('isite.cms.message.fieldRequired'),
-                val => /^[0-9]+$/.test(val) || 'Only digits allowed'
+                val =>  (val != null && val != '' && val >= 0) || i18n.tr('isite.cms.message.fieldRequired')
               ],
             }
           },
@@ -107,7 +106,7 @@ export default function controller(props: any, emit: any) {
               label: i18n.tr('isite.cms.form.price'),
               type: 'number',
               rules: [
-                val => !!val || i18n.tr('isite.cms.message.fieldRequired')
+                val =>  (val != null && val != '' && val >= 0) || i18n.tr('isite.cms.message.fieldRequired')
               ],
             }
           },
@@ -142,7 +141,7 @@ export default function controller(props: any, emit: any) {
               label: i18n.tr('irentcar.cms.label.gamma'),
               vIf: !state.modelValues.gammaOffice.id,
               rules: [
-                val => !!val || i18n.tr('isite.cms.message.fieldRequired'),
+                val =>  (val != null && val != '' && val >= 0) || i18n.tr('isite.cms.message.fieldRequired')
               ],
             },
             loadOptions: {
@@ -174,7 +173,7 @@ export default function controller(props: any, emit: any) {
               label: i18n.tr('isite.cms.form.quantity'),
               type: 'number',
               rules: [
-                val => !!val || i18n.tr('isite.cms.message.fieldRequired'),
+                val =>  (val != null && val != '' && val >= 0) || i18n.tr('isite.cms.message.fieldRequired'),
                 val => /^[0-9]+$/.test(val) || 'Only digits allowed'
               ],
             }
@@ -186,7 +185,7 @@ export default function controller(props: any, emit: any) {
               label: i18n.tr('isite.cms.form.price'),
               type: 'number',
               rules: [
-                val => !!val || i18n.tr('isite.cms.message.fieldRequired')
+                val =>  (val != null && val != '' && val >= 0) || i18n.tr('isite.cms.message.fieldRequired')
               ],
             }
           },
@@ -197,7 +196,7 @@ export default function controller(props: any, emit: any) {
               label: i18n.tr('isite.cms.form.tax'),
               type: 'number',
               rules: [
-                val => !!val || i18n.tr('isite.cms.message.fieldRequired')
+                val =>  (val != null && val != '' && val >= 0) || i18n.tr('isite.cms.message.fieldRequired')
               ],
             }
           }
@@ -392,6 +391,7 @@ export default function controller(props: any, emit: any) {
               statusId: {where: 'notIn', value: 2 }, //2 cancele statusID
             }
           },
+          filters: null
         },
       }
     },
