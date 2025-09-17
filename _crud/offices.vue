@@ -41,23 +41,23 @@ export default {
           filters: {
             countryId: {
               value: null,
-              type: 'select',
+              type: 'select',            
               props: {
-                label: this.$tr('ilocations.cms.form.country'),
-                clearable: true
+                label: this.$tr('isite.cms.label.country'),
+                clearable: true,
               },
               loadOptions: {
+                filterByQuery: true,
                 apiRoute: 'apiRoutes.qlocations.countries',
-                requestParams: {include: 'translations'},
+                requestParams: { include: 'translations' },
                 select: { label: 'name', id: 'id' },
-                filterByQuery: true
-              }
+              },
             },
             provinceId: {
               value: null,
               type: 'select',
               props: {
-                label: this.$tr('ilocations.cms.form.province'),
+                label: this.$tr('ilocation.cms.form.province'),
                 clearable: true
               },
               loadOptions: {
