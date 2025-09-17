@@ -389,6 +389,7 @@ export default function controller(props: any, emit: any) {
               pickupDate: {where: 'date', value: date, operator: '<=' },
               dropoffDate: {where: 'date', value: date, operator: '>=' },
               gammaOfficeId: gammaOfficeId,
+              statusId: {where: 'notIn', value: 2 }, //2 cancele statusID
             }
           },
         },
