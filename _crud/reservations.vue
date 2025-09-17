@@ -2,6 +2,14 @@
 </template>
 <script>
 import moment from 'moment';
+
+const colors = [
+  'tw-bg-orange-400',
+  'tw-bg-sky-400',
+  'tw-bg-red-600',
+  'tw-bg-green-400',
+];
+
 export default {
   data() {
     return {
@@ -44,7 +52,7 @@ export default {
 
             {
               name: 'statusId', label: this.$tr('isite.cms.form.status'), field: 'status', align: 'rigth',
-              format: val => val ? val.title : '-'
+              format: val => val ?  `<div class="${colors[val.id]} tw-p-2 tw-rounded-md tw-text-white">${val.title}</div>`    : '-'
             },
 
             {
@@ -63,7 +71,7 @@ export default {
 
             {
               name: 'extrasData', label: this.$tr('irentcar.cms.label.extras'), field: 'extrasData', align: 'rigth',
-              format: val =>  val.map(x =>  `${x.extra.title} : ${x.price}`).join(', ')
+              format: val =>  val.map(x =>  x.extra.title).join(', ')
             },
 
             /*
