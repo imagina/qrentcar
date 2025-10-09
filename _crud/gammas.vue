@@ -25,6 +25,10 @@ export default {
 						{
               name: 'title', label: this.$tr('isite.cms.form.title'), field: 'title', align: 'rigth'
             },
+            {
+              name: 'statusId', label: this.$tr('isite.cms.form.status'), field: 'statusId', align: 'rigth',
+              asStatus: true
+            },
 						{
               name: 'passengersNumber', label: this.$tr('irentcar.cms.form.passengersNumber'), field: 'passengersNumber', align: 'center',
             },
@@ -195,7 +199,7 @@ export default {
               type: 'number'
             }
           },
-          
+
 
 
           mediasSingle: {

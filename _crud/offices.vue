@@ -26,6 +26,10 @@ export default {
               name: 'title', label: this.$tr('isite.cms.form.title'), field: 'title', align: 'rigth'
             },
             {
+              name: 'statusId', label: this.$tr('isite.cms.form.status'), field: 'statusId', align: 'rigth',
+              asStatus: true
+            },
+            {
               name: 'created_at', label: this.$tr('isite.cms.form.createdAt'), field: 'createdAt', align: 'left',
               format: val => val ? this.$trd(val) : '-'
             },
@@ -41,7 +45,7 @@ export default {
           filters: {
             countryId: {
               value: null,
-              type: 'select',            
+              type: 'select',
               props: {
                 label: this.$tr('isite.cms.label.country'),
                 clearable: true,
