@@ -54,7 +54,7 @@ export default {
                 filterByQuery: true,
                 apiRoute: 'apiRoutes.qlocations.countries',
                 requestParams: { include: 'translations' },
-                select: { label: 'name', id: 'id' },
+                select: { label: 'title', id: 'id' },
               },
             },
             provinceId: {
@@ -67,7 +67,7 @@ export default {
               loadOptions: {
                 apiRoute: 'apiRoutes.qlocations.provinces',
                 requestParams: {include: 'translations'},
-                select: { label: 'name', id: 'id' },
+                select: { label: 'title', id: 'id' },
                 filterByQuery: true
               }
             },
@@ -81,7 +81,7 @@ export default {
               loadOptions: {
                 apiRoute: 'apiRoutes.qlocations.cities',
                 requestParams: {include: 'translations'},
-                select: { label: 'name', id: 'id' },
+                select: { label: 'title', id: 'id' },
                 filterByQuery: true
               }
             }
@@ -90,6 +90,10 @@ export default {
         update: {
           title: this.$tr('irentcar.cms.updateOffice'),
           requestParams: { include: 'locatable,translations' },
+          mapData: (data) => {
+            if (data.locatable.length) data.locatable = data.locatable[0];
+            return data;
+          }
         },
         delete: true,
         formLeft: {
@@ -149,7 +153,7 @@ export default {
               filterByQuery: true,
               apiRoute: 'apiRoutes.qlocations.countries',
               requestParams: { include: 'translations' },
-              select: { label: 'name', id: 'id' },
+              select: { label: 'title', id: 'id' },
             },
           },
           provinceId: {
@@ -166,7 +170,7 @@ export default {
               apiRoute: this.crudInfo.locatable?.countryId
                 ? 'apiRoutes.qlocations.provinces'
                 : false,
-              select: { label: 'name', id: 'id' },
+              select: { label: 'title', id: 'id' },
               requestParams: {
                 filter: { countryId: this.crudInfo.locatable?.countryId },
                 include: 'translations'
@@ -187,7 +191,7 @@ export default {
               apiRoute: this.crudInfo.locatable?.provinceId
                 ? 'apiRoutes.qlocations.cities'
                 : false,
-              select: { label: 'name', id: 'id' },
+              select: { label: 'title', id: 'id' },
               requestParams: {
                 filter: { provinceId: this.crudInfo.locatable?.provinceId },
                 include: 'translations'
