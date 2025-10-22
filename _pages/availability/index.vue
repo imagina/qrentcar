@@ -83,8 +83,17 @@
 					<template v-for="(item, index) in rows ">
 						<div class="tw-grid tw-grid-flow-col">
 							<template v-for="(day, index) in nextDays ">
+
+								<div v-if="showSpinner(item, day.fullDate)"
+									class="tw-w-[100px] tw-flex tw-items-center tw-justify-center tw-border-2 tw-p-2 tw-cursor-pointer hover:tw-bg-sky-100 hover:tw-border-sky-300"
+								>
+									<div class="q-box-inner-loading">
+      									<q-spinner size="50px" color="primary"/>
+    								</div>
+								</div>
+
 								<div
-									v-if="item?.gamma"
+									v-if="item?.gamma && !showSpinner(item, day.fullDate)"
 									class="tw-w-[100px] tw-items-center tw-justify-items-center tw-border-2 tw-p-2 tw-cursor-pointer hover:tw-bg-sky-100 hover:tw-border-sky-300"
 									:class="[getAvailability(item, day.fullDate).reservedQuantity ? 'tw-bg-green-100 tw-border-green-100' : (isWeekend(day.fullDate) ? 'tw-bg-slate-100' : '')]"
 								>
@@ -112,7 +121,7 @@
 														</b>
 														<q-separator class="q-mt-sm" />
 														<!-- Form -->
-														<q-form autocorrect="off" autocomplete="off" @submit="updateAvailability(getAvailability(item, day.fullDate))"
+														<q-form autocorrect="off" autocomplete="off" @submit="updateAvailability(getAvailability(item, day.fullDate), day.fullDate)"
 																		@validation-error="$alert.error($tr('isite.cms.message.formInvalid'))">
 															<div class="q-py-sm">
 																<!-- Field -->
@@ -164,8 +173,11 @@
 
 								</div>
 
+
+
+								<!--days of week -->
 								<div
-									v-else
+									v-if="!item?.gamma && !showSpinner(item, day.fullDate)"
 										class="tw-w-[100px] tw-border-2 tw-px-4 tw-py-2 tw-h-[60px] "
 										:class="isWeekend(day.fullDate) ? 'tw-bg-slate-200' : 'tw-bg-slate-100'"
 									>

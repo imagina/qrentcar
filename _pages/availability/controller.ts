@@ -19,6 +19,10 @@ export default function controller(props: any, emit: any) {
   const state = reactive({
     // Key: Default Value
     loading: false,
+    requestLoading: {
+      id: null,
+      date: null
+    },
     title: 'Ready Rent Cars',
     rows: [],
 
@@ -268,7 +272,7 @@ export default function controller(props: any, emit: any) {
       }
     }),
     showCalendar: computed(() => state.gammaOffice.length && !state.loading ),
-    nextDays: computed(() => methods.getNextDays())
+    nextDays: computed(() => methods.getNextDays())    
   }
 
   // Methods
@@ -285,8 +289,10 @@ export default function controller(props: any, emit: any) {
       state.modelValues.availability.price = availability.price
       state.modelValues.availability.reason = availability.reason
     },
-    async updateAvailability(availability){
-      state.loading = true
+    async updateAvailability(availability, fullDate){
+      state.requestLoading.id = availability.gammaOfficeId
+      state.requestLoading.date = fullDate
+      
       availability.quantity =  state.modelValues.availability.quantity,
       availability.price =  state.modelValues.availability.price
       availability.reason = state.modelValues.availability.reason
@@ -296,9 +302,11 @@ export default function controller(props: any, emit: any) {
       } else {
         delete availability.reservedQuantity
         await services.createAvailability(availability)
-      }
-      state.loading = false
-      methods.getDailyAvailabilities()
+      }     
+      
+      await methods.getDailyAvailabilities()
+      state.requestLoading.id = null
+      state.requestLoading.date = null
     },
     getAvailability(gammaOffice, date){
       const fullDate = moment(date).format(dateFormat)
@@ -307,16 +315,16 @@ export default function controller(props: any, emit: any) {
         id: availability?.id || null,
         gammaOfficeId: gammaOffice.id,
         availableDate: fullDate,
-        reservedQuantity: availability?.reservedQuantity || 0,
-        quantity: availability?.quantity || gammaOffice.quantity,
-        price: availability?.price || gammaOffice.price,
+        reservedQuantity: availability ? availability.reservedQuantity : 0,
+        quantity: availability ? availability.quantity : gammaOffice.quantity,
+        price: availability ? availability.price : gammaOffice.price,
         reason : availability?.reason || '',
       }
       return result
     },
     async getDailyAvailabilities(){
       if(!state.filterValues.office || !state.filterValues.date) return
-      state.loading = true
+      
       const from = state.filterValues.date
       await services.getDailyAvailabilities({
         officeId: state.filterValues.office.id,
@@ -324,7 +332,6 @@ export default function controller(props: any, emit: any) {
         to: moment(from).add(30, "days").format(dateFormat),
       }).then(response => {
         state.dailyAvailabilities = response || []
-        state.loading = false
       })
     },
 
@@ -362,7 +369,9 @@ export default function controller(props: any, emit: any) {
         if(state.modelValues.gammaOffice.id){
           await services.updateGammaOffice(state.modelValues.gammaOffice.id, state.modelValues.gammaOffice).then( async (response)  => {
             await methods.getGammaOffices()
+            state.loading = true
             await methods.getDailyAvailabilities()
+            state.loading = false
           })
         } else {
           if(state.modelValues.gammaOffice.id){
@@ -370,7 +379,9 @@ export default function controller(props: any, emit: any) {
           }
           await services.createGammaOffice(state.modelValues.gammaOffice).then( async (response)  => {
             await methods.getGammaOffices()
+            state.loading = true
             await methods.getDailyAvailabilities()
+            state.loading = false
           })
         }
         state.loading = false
@@ -404,7 +415,9 @@ export default function controller(props: any, emit: any) {
       }
 
       state.filterValues.date = values.date
+      state.loading = true
       await methods.getDailyAvailabilities()
+      state.loading = false
     },
 
     getNextDays(){
@@ -426,6 +439,9 @@ export default function controller(props: any, emit: any) {
     isWeekend(date){
       const day =  moment(date).isoWeekday()
       return (day == 6 ||  day == 7)
+    }, 
+    showSpinner(item, fullDate){
+       return state.requestLoading.id == item.id && state.requestLoading.date == fullDate
     }
   }
 
