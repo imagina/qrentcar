@@ -307,9 +307,9 @@ export default function controller(props: any, emit: any) {
         id: availability?.id || null,
         gammaOfficeId: gammaOffice.id,
         availableDate: fullDate,
-        reservedQuantity: availability?.reservedQuantity || 0,
-        quantity: availability?.quantity || gammaOffice.quantity,
-        price: availability?.price || gammaOffice.price,
+        reservedQuantity: availability ? availability.reservedQuantity : 0,
+        quantity: availability ? availability.quantity : gammaOffice.quantity,
+        price: availability ? availability.price : gammaOffice.price,
         reason : availability?.reason || '',
       }
       return result
