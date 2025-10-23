@@ -292,7 +292,7 @@ export default function controller(props: any, emit: any) {
     async updateAvailability(availability, fullDate){
       state.requestLoading.id = availability.gammaOfficeId
       state.requestLoading.date = fullDate
-      
+
       availability.quantity =  state.modelValues.availability.quantity,
       availability.price =  state.modelValues.availability.price
       availability.reason = state.modelValues.availability.reason
@@ -302,9 +302,9 @@ export default function controller(props: any, emit: any) {
       } else {
         delete availability.reservedQuantity
         await services.createAvailability(availability)
-      }     
-      
-      await methods.getDailyAvailabilities()
+      }
+
+      await methods.getDailyAvailabilities(false)
       state.requestLoading.id = null
       state.requestLoading.date = null
     },
@@ -322,9 +322,10 @@ export default function controller(props: any, emit: any) {
       }
       return result
     },
-    async getDailyAvailabilities(){
+    async getDailyAvailabilities(showLoading = true){
       if(!state.filterValues.office || !state.filterValues.date) return
-      
+      if(showLoading) state.loading = true
+
       const from = state.filterValues.date
       await services.getDailyAvailabilities({
         officeId: state.filterValues.office.id,
@@ -332,6 +333,7 @@ export default function controller(props: any, emit: any) {
         to: moment(from).add(30, "days").format(dateFormat),
       }).then(response => {
         state.dailyAvailabilities = response || []
+        if(showLoading) state.loading = false
       })
     },
 
@@ -369,9 +371,7 @@ export default function controller(props: any, emit: any) {
         if(state.modelValues.gammaOffice.id){
           await services.updateGammaOffice(state.modelValues.gammaOffice.id, state.modelValues.gammaOffice).then( async (response)  => {
             await methods.getGammaOffices()
-            state.loading = true
             await methods.getDailyAvailabilities()
-            state.loading = false
           })
         } else {
           if(state.modelValues.gammaOffice.id){
@@ -379,9 +379,7 @@ export default function controller(props: any, emit: any) {
           }
           await services.createGammaOffice(state.modelValues.gammaOffice).then( async (response)  => {
             await methods.getGammaOffices()
-            state.loading = true
             await methods.getDailyAvailabilities()
-            state.loading = false
           })
         }
         state.loading = false
@@ -415,9 +413,7 @@ export default function controller(props: any, emit: any) {
       }
 
       state.filterValues.date = values.date
-      state.loading = true
       await methods.getDailyAvailabilities()
-      state.loading = false
     },
 
     getNextDays(){
@@ -439,7 +435,7 @@ export default function controller(props: any, emit: any) {
     isWeekend(date){
       const day =  moment(date).isoWeekday()
       return (day == 6 ||  day == 7)
-    }, 
+    },
     showSpinner(item, fullDate){
        return state.requestLoading.id == item.id && state.requestLoading.date == fullDate
     }
