@@ -69,7 +69,7 @@
 								color="primary"
 								text-color="white"
 							>
-								{{ item.gamma.id }} - {{ item.gamma.title }}
+								{{ item.gamma.title }}
 							</q-chip>
 
 							<p v-if="item?.gamma">
