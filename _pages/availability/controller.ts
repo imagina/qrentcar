@@ -103,7 +103,7 @@ export default function controller(props: any, emit: any) {
                 label: i18n.tr('isite.cms.form.endDate'),
                 mask: dateFormat,
                 rules: [
-                  val =>  ( moment(val).isAfter(state.modelValues.availability.initialEndDate) || moment(val).isSame(state.modelValues.availability.initialEndDate)  )  || `${i18n.tr('irentcar.cms.form.endDateWarning')} ${state.modelValues.availability.initialEndDate}`
+                  val => (moment(val).isAfter(state.modelValues.availability.initialEndDate) || moment(val).isSame(state.modelValues.availability.initialEndDate)  )  || `${i18n.tr('irentcar.cms.form.endDateWarning')} ${state.modelValues.availability.initialEndDate}`
                 ]
               }
             },
