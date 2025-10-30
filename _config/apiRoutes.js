@@ -13,6 +13,7 @@ export default {
   gammaOffice: `${urlBase}/gamma-office`,
   gammaOfficeExtra: `${urlBase}/gamma-office-extra`,
   dailyAvailabilities: `${urlBase}/daily-availabilities`,
+  createOrUpdateAvailability: `${urlBase}/daily-availabilities/update-or-create`,
   reservations: `${urlBase}/reservations`,
   reservationStatuses: `${urlBase}/reservation-statuses`,
   transmissionTypes: `${urlBase}/transmission-types`,
