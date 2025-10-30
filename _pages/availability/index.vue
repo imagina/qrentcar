@@ -69,7 +69,7 @@
 								color="primary"
 								text-color="white"
 							>
-								{{ item.gamma.title }}
+								{{ item.gamma.id }} - {{ item.gamma.title }}
 							</q-chip>
 
 							<p v-if="item?.gamma">
@@ -85,7 +85,7 @@
 							<template v-for="(day, index) in nextDays ">
 
 								<div v-if="showSpinner(item, day.fullDate)"
-									class="tw-w-[100px] tw-flex tw-items-center tw-justify-center tw-border-2 tw-p-2 tw-cursor-pointer hover:tw-bg-sky-100 hover:tw-border-sky-300"
+									class="tw-w-[100px] tw-h-[117px] tw-flex tw-items-center tw-justify-center tw-border-2 tw-p-2 tw-cursor-pointer hover:tw-bg-sky-100 hover:tw-border-sky-300"
 								>
 									<div class="q-box-inner-loading">
       									<q-spinner size="50px" color="primary"/>
