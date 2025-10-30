@@ -30,7 +30,8 @@ export default {
         "dropoffDate": "Drop off Date",
         "pickupOffice": "Pick up Office",
         "dropoffOffice": "Drop off Office",
-        "rentalDays": "Rental Days"
+        "rentalDays": "Rental Days",
+        "endDateWarning": "The date cannot be earlier than"
       },
       "newOffice": "New Office",
       "updateOffice": "Update Office",

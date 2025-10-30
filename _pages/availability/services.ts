@@ -81,4 +81,13 @@ export default {
       }).catch(error => reject(error))
     })
   },
+
+  createOrUpdateAvailability(data, params = {params: {}}): Promise<any> {
+    return new Promise((resolve, reject) => {      
+      //Request
+      baseService.create('apiRoutes.qrentcar.createOrUpdateAvailability', data).then(response => {
+        resolve(response)
+      }).catch(error => reject(error))
+    })
+  },
 }

@@ -20,8 +20,8 @@ export default function controller(props: any, emit: any) {
     // Key: Default Value
     loading: false,
     requestLoading: {
-      id: null,
-      date: null
+      id: [],
+      date: []
     },
     title: 'Ready Rent Cars',
     rows: [],
@@ -72,7 +72,9 @@ export default function controller(props: any, emit: any) {
       availability: {
         quantity: null,
         price: null,
-        reason: null
+        reason: null,
+        endDate: null,
+        initialEndDate: null
       },
       gammaOffice: {
         id: null,
@@ -94,6 +96,17 @@ export default function controller(props: any, emit: any) {
     dynamicFields: computed(() =>  {
       return {
         availability: {
+            endDate: {
+              value: moment().format(dateFormat),
+              type: 'date',
+              props: {
+                label: i18n.tr('isite.cms.form.endDate'),
+                mask: dateFormat,
+                rules: [
+                  val =>  ( moment(val).isAfter(state.modelValues.availability.initialEndDate) || moment(val).isSame(state.modelValues.availability.initialEndDate)  )  || `${i18n.tr('irentcar.cms.form.endDateWarning')} ${state.modelValues.availability.initialEndDate}`
+                ]
+              }
+            },
           quantity: {
             type: 'input',
             props: {
@@ -272,7 +285,7 @@ export default function controller(props: any, emit: any) {
       }
     }),
     showCalendar: computed(() => state.gammaOffice.length && !state.loading ),
-    nextDays: computed(() => methods.getNextDays())    
+    nextDays: computed(() => methods.getNextDays())
   }
 
   // Methods
@@ -288,25 +301,41 @@ export default function controller(props: any, emit: any) {
       state.modelValues.availability.quantity = availability.quantity
       state.modelValues.availability.price = availability.price
       state.modelValues.availability.reason = availability.reason
+      state.modelValues.availability.endDate = availability.availableDate
+      state.modelValues.availability.initialEndDate = availability.availableDate //backup for rule
     },
     async updateAvailability(availability, fullDate){
       state.requestLoading.id = availability.gammaOfficeId
-      state.requestLoading.date = fullDate
 
       availability.quantity =  state.modelValues.availability.quantity,
       availability.price =  state.modelValues.availability.price
       availability.reason = state.modelValues.availability.reason
 
-      if(availability.id){
-        await  services.updateAvailability(availability.id, {...availability})
-      } else {
+      if(availability?.id){
         delete availability.reservedQuantity
-        await services.createAvailability(availability)
       }
 
+      if(moment( availability.availableDate).isSame(state.modelValues.availability.endDate)){
+        state.requestLoading.date[0] = fullDate
+      } else {
+        //range
+        const dates = [];
+        const start = moment(availability.availableDate);
+        const end = moment(state.modelValues.availability.endDate);
+        // loop until we reach or pass the end date
+        while (start.isSameOrBefore(end, 'day')) {
+          dates.push(start.format(dateFormat));
+          start.add(1, 'day'); // move to next day
+        }
+        state.requestLoading.date = dates
+        availability.endDate = state.modelValues.availability.endDate
+      }
+
+      await services.createOrUpdateAvailability(availability)
+
       await methods.getDailyAvailabilities(false)
-      state.requestLoading.id = null
-      state.requestLoading.date = null
+      state.requestLoading.id = []
+      state.requestLoading.date = []
     },
     getAvailability(gammaOffice, date){
       const fullDate = moment(date).format(dateFormat)
@@ -437,7 +466,7 @@ export default function controller(props: any, emit: any) {
       return (day == 6 ||  day == 7)
     },
     showSpinner(item, fullDate){
-       return state.requestLoading.id == item.id && state.requestLoading.date == fullDate
+       return state.requestLoading.id == item.id && state.requestLoading.date.includes(fullDate)
     }
   }
 
